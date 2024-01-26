@@ -2,6 +2,9 @@ import streamlit as st
 from openai import OpenAI
 #from streamlit_option_menu import option_menu
 from streamlit_extras.switch_page_button import switch_page
+from pymongo import MongoClient
+from pymongo.server_api import ServerApi
+from datetime import datetime
 from st_pages import add_indentation,hide_pages
 
 
@@ -53,11 +56,6 @@ with st.sidebar:
         </button></a>
             """
         st.markdown(feedback, unsafe_allow_html=True)
-
-
-
-
-
 
 previous_button_style = """
     <style>
@@ -141,43 +139,59 @@ if st.button("Next step: Questionnaire", type="secondary"):
 st.markdown(previous_button_style, unsafe_allow_html=True,)
 st.markdown(next_button_style, unsafe_allow_html=True,)
 
-# selected = option_menu(
-#     menu_title = "💬 Chatbots: please test the 2 chatbots using the same starting question. Afterwards, evaluate them using the evaluation form.",
-#     options = ["Chatbot 1", "Chatbot 2"],
-#     orientation = "horizontal",
-#     default_index=1
-# )
+@st.cache_resource
+def init_connection():
+    return MongoClient(st.secrets.mongo.uri, server_api=ServerApi('1'))
 
-# if selected == "Chatbot 1":
-#     switch_page("Chatbot")
+client = init_connection()
 
-# if selected == "Chatbot 2":
-#     print("trolololo")
+def write_data(mydict):
+    db = client.test_db #establish connection to the 'test_db' db
+    items = db.test_chat # return all result from the 'test_chats' collection
+    items.insert_one(mydict)
 
-# st.markdown("""<style>.button1 
-#         #chat1 {
-#         position: fixed;
-#         top: 100px;
-#         left: 600px;
-#         }</style>
-#         <div id="chat1"><button class="button1">Button 1</button></div>""", unsafe_allow_html=True)
-# button1_clicked = st.button("Button 1")
+def get_chatlog():
+    log = {}
+    message_id_count = 0
+    for msg in st.session_state.chatbot2_messages:
+        log[str(message_id_count)] = {"role":msg.get("role"), "content":msg.get("content")}
+        message_id_count += 1
 
-# st.markdown("""<style>.button1 
-#         {
-#         position: fixed;
-#         top: 100px;
-#         left: 600px;
-#         }</style>""", unsafe_allow_html=True)
-# button2_clicked = st.button("Button 2")
+    return log
 
-#st.title("💬 Chatbot")
+def get_userchat(chatlog):
+    userchat = {"Task-1":{"id": str(st.session_state.user_id), "time": datetime.now(), "Chatbot-2": chatlog}}
+    return userchat
 
-#st.caption("🚀 A streamlit chatbot powered by OpenAI LLM")
-if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
+def update_chat_db():
+    db = client.test_db 
+    chatlog = get_chatlog()
+    
+    print(len(list(db.test_chat.find({"Task-1.id": st.session_state.user_id}))))
+    print(st.session_state.user_id)
 
-for msg in st.session_state.messages:
+    if len(list(db.test_chat.find({"Task-1.id": st.session_state.user_id}))) > 0:
+        print("opdaterte chatobjekt")
+        db.test_chat.update_one({"Task-1.id": st.session_state.user_id}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-2": chatlog}})
+    else:
+        write_data(get_userchat(chatlog))
+        print("lagret ny chatobjekt")
+
+    print(st.session_state.user_id)
+
+# savebutton = st.button("Save chat")
+
+# if savebutton:
+#     chatlog = get_userchat(get_chatlog())
+#     write_data(chatlog)
+#     db = client.test_db 
+#     print(len(list(db.test_chat.find({"Task-1.id": str(st.session_state.user_id)}))))
+
+
+if "chatbot2_messages" not in st.session_state:
+    st.session_state["chatbot2_messages"] = [{"role": "assistant", "content": "How can I help you?"}]
+
+for msg in st.session_state.chatbot2_messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
 if prompt := st.chat_input():
@@ -186,12 +200,11 @@ if prompt := st.chat_input():
     #     st.stop()
 
     #client = OpenAI(api_key=openai_api_key)
-    st.session_state.messages.append({"role": "user", "content": prompt})
+    st.session_state.chatbot2_messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
-    #response = client.chat.completions.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
+    #response = client.chat.completions.create(model="gpt-3.5-turbo", chatbot2_messages=st.session_state.chatbot2_messages)
     msg = "hello" #response.choices[0].message.content
-    st.session_state.messages.append({"role": "assistant", "content": msg})
+    st.session_state.chatbot2_messages.append({"role": "assistant", "content": msg})
     st.chat_message("assistant").write(msg)
 
-
-#previuos_button_style = 
+    update_chat_db()
