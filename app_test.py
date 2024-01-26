@@ -4,7 +4,10 @@ from streamlit.testing.v1 import AppTest
 from openai.types.chat import ChatCompletionMessage
 from openai.types.chat.chat_completion import ChatCompletion, Choice
 
+def test():
+    assert True
 
+    
 # See https://github.com/openai/openai-python/issues/715#issuecomment-1809203346
 # def create_chat_completion(response: str, role: str = "assistant") -> ChatCompletion:
 #     return ChatCompletion(
