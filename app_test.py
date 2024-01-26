@@ -6,23 +6,23 @@ from openai.types.chat.chat_completion import ChatCompletion, Choice
 
 
 # See https://github.com/openai/openai-python/issues/715#issuecomment-1809203346
-def create_chat_completion(response: str, role: str = "assistant") -> ChatCompletion:
-    return ChatCompletion(
-        id="foo",
-        model="gpt-3.5-turbo",
-        object="chat.completion",
-        choices=[
-            Choice(
-                finish_reason="stop",
-                index=0,
-                message=ChatCompletionMessage(
-                    content=response,
-                    role=role,
-                ),
-            )
-        ],
-        created=int(datetime.datetime.now().timestamp()),
-    )
+# def create_chat_completion(response: str, role: str = "assistant") -> ChatCompletion:
+#     return ChatCompletion(
+#         id="foo",
+#         model="gpt-3.5-turbo",
+#         object="chat.completion",
+#         choices=[
+#             Choice(
+#                 finish_reason="stop",
+#                 index=0,
+#                 message=ChatCompletionMessage(
+#                     content=response,
+#                     role=role,
+#                 ),
+#             )
+#         ],
+#         created=int(datetime.datetime.now().timestamp()),
+#     )
 
 
 # @patch("openai.resources.chat.Completions.create")
