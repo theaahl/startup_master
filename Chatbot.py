@@ -1,7 +1,13 @@
 # from openai import OpenAI
 import streamlit as st
-
+from st_pages import show_pages_from_config, add_page_title
 st.set_page_config(layout="wide") 
+# Either this or add_indentation() MUST be called on each page in your
+# app to add indendation in the sidebar
+add_page_title()
+
+show_pages_from_config()
+
 with st.sidebar:
     openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
     "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"

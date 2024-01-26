@@ -1,0 +1,29 @@
+[[pages]]
+path = "pages/1_Home.py"
+name = "Home"
+icon = "🏠"
+
+[[pages]]
+path = "pages/2_All_Tasks.py"
+name = "All Tasks"
+icon = ":books:"
+
+
+# Pages after an `is_section = true` will be indented
+[[pages]]
+path = "pages/6_Task_Information.py"
+name = "Task_Information"
+
+[[pages]]
+path = "pages/3_Chatbot_1.py"
+name = "Chatbot_1"
+
+[[pages]]
+path = "pages/4_Chatbot_2.py"
+name = "Chatbot_2"
+
+[[pages]]
+path = "pages/5_Feedback.py"
+name = "Feedback"
+
+

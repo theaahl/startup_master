@@ -19,7 +19,7 @@ with st.sidebar:
     with st.expander("Task 1", expanded=True):
         task_info = f"""
         <a href="Task_Information" target = "_self">
-        <button class="not_clicked">
+        <button class="clicked">
             Task information
         </button></a>
             """

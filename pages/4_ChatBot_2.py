@@ -1,10 +1,61 @@
-from openai import OpenAI
 import streamlit as st
+from openai import OpenAI
 #from streamlit_option_menu import option_menu
 from streamlit_extras.switch_page_button import switch_page
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 from datetime import datetime
+from st_pages import add_indentation,hide_pages
+
+
+st.set_page_config(layout="wide") 
+
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+local_css("./styles.css")
+####### SIDEBAR #######
+# Either this or add_indentation() MUST be called on each page in your
+# app to add indendation in the sidebar
+add_indentation()
+hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
+#show_pages_from_config()
+
+with st.sidebar:
+    st.write("Your tasks")
+    with st.expander("Task 1", expanded=True):
+        task_info = f"""
+        <a href="Task_Information" target = "_self">
+        <button class="not_clicked">
+            Task information
+        </button></a>
+            """
+        st.markdown(task_info, unsafe_allow_html=True)
+
+        c1 = f"""
+        <a href="Chatbot_1" target = "_self">
+        <button class="not_clicked">
+            Chatbot 1
+        </button></a>
+            """
+        st.markdown(c1, unsafe_allow_html=True)
+
+        c2 = f"""
+        <a href="Chatbot_2" target = "_self">
+        <button class="clicked">
+            Chatbot 2
+        </button></a>
+            """
+        st.markdown(c2, unsafe_allow_html=True)
+
+        feedback = f"""
+        <a href="Feedback" target = "_self">
+        <button class="not_clicked">
+            Feedback
+        </button></a>
+            """
+        st.markdown(feedback, unsafe_allow_html=True)
 
 previous_button_style = """
     <style>
@@ -70,7 +121,6 @@ alert_text_style = """
 </div>
 """
 
-st.set_page_config(layout="wide") 
 with st.sidebar:
     openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
     "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
@@ -81,10 +131,10 @@ st.markdown(alert_text_style, unsafe_allow_html=True)
 st.markdown(title_style,unsafe_allow_html=True)
 
 if st.button("Previous step: Chatbot 1", type="primary"):
-    switch_page("Chatbot 1")
+    switch_page("chatbot 1")
 
 if st.button("Next step: Questionnaire", type="secondary"):
-    switch_page("Chatbot 2")
+    switch_page("chatbot 2")
 
 st.markdown(previous_button_style, unsafe_allow_html=True,)
 st.markdown(next_button_style, unsafe_allow_html=True,)
@@ -158,5 +208,3 @@ if prompt := st.chat_input():
     st.chat_message("assistant").write(msg)
 
     update_chat_db()
-
-#previuos_button_style = 
