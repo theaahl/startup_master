@@ -1,8 +1,6 @@
-import streamlit as st 
-from st_pages import add_indentation,hide_pages
+import streamlit as st
+from st_pages import add_indentation, hide_pages
 
-
-st.set_page_config(layout = "wide")
 
 def local_css(file_name):
     with open(file_name) as f:
@@ -21,7 +19,7 @@ with st.sidebar:
     with st.expander("Task 1", expanded=True):
         task_info = f"""
         <a href="Task_Information" target = "_self">
-        <button class="not_clicked">
+        <button class="clicked">
             Task information
         </button></a>
             """
@@ -29,7 +27,7 @@ with st.sidebar:
 
         c1 = f"""
         <a href="Chatbot_1" target = "_self">
-        <button class="clicked">
+        <button class="not_clicked">
             Chatbot 1
         </button></a>
             """
@@ -51,6 +49,3 @@ with st.sidebar:
             """
         st.markdown(feedback, unsafe_allow_html=True)
 
-
-
-            
