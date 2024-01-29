@@ -6,15 +6,29 @@ from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 from datetime import datetime
 from st_pages import add_indentation,hide_pages
-from streamlit_extras.switch_page_button import switch_page
+from st_click_detector import click_detector
 
 st.set_page_config(layout="wide") 
+
 
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-local_css("./styles.css")
+local_css("/Users/theaahlgren/Documents/Masteroppgave/StartupGPT_prototype/startup_master/styles.css")
+
+st.markdown("""
+            <style>
+                div[data-testid="column"] {
+                    width: fit-content !important;
+                    flex: unset;
+                }
+                div[data-testid="column"] * {
+                    width: fit-content !important;
+                }
+            </style>
+            """, unsafe_allow_html=True)
+
 ####### SIDEBAR #######
 # Either this or add_indentation() MUST be called on each page in your
 # app to add indendation in the sidebar
@@ -25,9 +39,17 @@ hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
 with st.sidebar:
     st.write("Your tasks")
     with st.expander("Task 1", expanded=True):
+        # new_test = """<a id="task information" href="#" target = "_self"><button class="not_clicked">Task information</button></a><a id="chatbot 1" href="#" target = "_self"><button class="not_clicked">Chatbot 1</button></a><a id="chatbot 2" href="#" target = "_self"><button class="clicked">Chatbot 2</button></a><a id="feedback" href="#" target = "_self"><button class="not_clicked">Feedback</button></a>"""
+        # #st.markdown(new_test, unsafe_allow_html=True)
+        # print(new_test)
+        # # st.markdown(new_test, unsafe_allow_html=True)
+        # clicked = click_detector(new_test)
+        # # print("clicked", clicked)
+        # if clicked != "":
+        #     switch_page(clicked)
         task_info = f"""
-        <a href="Task_Information" target = "_self">
-        <button class="not_clicked">
+         <a href="Task_Information" target = "_self">
+         <button class="not_clicked">
             Task information
         </button></a>
             """
@@ -56,6 +78,7 @@ with st.sidebar:
         </button></a>
             """
         st.markdown(feedback, unsafe_allow_html=True)
+
 
 header = st.container()
 

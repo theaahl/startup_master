@@ -14,17 +14,8 @@
 
 .not_clicked:hover {
     width: 100%;
-    color: rgba(18, 52, 86, 0.6);
-    justify-content: left;
-    border-radius: 0.25rem;
-    padding-left: 0.5rem;
-    padding-right: 0.25rem;
-    margin: 0.125rem 0;
-    line-height: 2;
     background-color: rgba(151, 166, 195, 0.15);
-    text-align: left;
 }
-
 
 .clicked {
     background: none;
@@ -44,9 +35,14 @@
 
 .clicked:hover {
     background: none;
-    color: rgb(18, 52, 86); 
+    background-color: rgba(151, 166, 195, 0.25);
+}
+
+.disabeled{
+    color: rgba(18, 52, 86,0.2); 
+    background: none;
 	border: none;
-	cursor: pointer;
+	cursor: not-allowed;
     width: 100%;
     border-radius: 0.25rem;
     padding-left: 0.5rem;
@@ -54,6 +50,5 @@
     margin: 0.125rem 0;
     line-height: 2;
     text-align: left;
-    background-color: rgba(151, 166, 195, 0.25);
     font-weight: 600;
 }

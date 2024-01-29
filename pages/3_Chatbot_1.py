@@ -48,7 +48,7 @@ with st.sidebar:
         </button></a>
             """
         st.markdown(task_info, unsafe_allow_html=True)
-
+        
         c1 = f"""
         <a href="Chatbot_1" target = "_self">
         <button class="clicked">
