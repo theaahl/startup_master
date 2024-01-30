@@ -8,14 +8,9 @@ def local_css(file_name):
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 local_css("./styles.css")
-####### SIDEBAR #######
-# Either this or add_indentation() MUST be called on each page in your
-# app to add indendation in the sidebar
+
 add_indentation()
 hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
-#show_pages_from_config()
-
-
 
 
 @st.cache_resource(experimental_allow_widgets=True)
@@ -28,6 +23,7 @@ cookie_manager.get_all()
 # Fetch a specific cookie
 user_consent_cookie = cookie_manager.get(cookie="kjeks")
 
+#### SIDEBAR ####
 with st.sidebar:
     st.write("Your tasks")
     with st.expander("Task 1", expanded=True):

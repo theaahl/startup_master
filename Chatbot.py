@@ -9,29 +9,20 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-local_css("./styles.css")
-####### SIDEBAR #######
-# Either this or add_indentation() MUST be called on each page in your
-# app to add indendation in the sidebar
-add_indentation()
-hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
-#show_pages_from_config()
-
-
-
-#@st.cache_resource
-#@st.cache(allow_output_mutation=True)
 @st.cache_resource(experimental_allow_widgets=True)
 def get_manager():
     return stx.CookieManager()
 
 cookie_manager = get_manager()
 cookie_manager.get_all()
-
-
-
-# Fetch a specific cookie
 user_consent_cookie = cookie_manager.get(cookie="kjeks")
+
+
+local_css("./styles.css")
+####### SIDEBAR #######
+add_indentation()
+hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
+
 
 with st.sidebar:
     st.write("Your tasks")
@@ -104,28 +95,7 @@ with st.sidebar:
 
 
 
-####### SIDEBAR #######
-# Either this or add_indentation() MUST be called on each page in your
-# app to add indendation in the sidebar
-# add_indentation()
-# hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
-# #show_pages_from_config()
-
-# with st.sidebar:
-#     st.write("Your tasks")
-#     with st.expander("Task 1", expanded=True):
-#         if st.button("Task information"):
-#             switch_page("Task_information")
-
-#         if st.button("Chatbot 1"):
-#             switch_page("Chatbot_1")
-        
-#         if st.button("Chatbot 2"):
-#             switch_page("Chatbot_2")
-
-#         if st.button("Feedback"):
-#             switch_page("Feedback")
-
+#### MAIN PAGE ####
 st.title("StartupGPT")
 
 c = st.container()
