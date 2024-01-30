@@ -14,7 +14,7 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-local_css("/Users/theaahlgren/Documents/Masteroppgave/StartupGPT_prototype/startup_master/styles.css")
+local_css("../styles.css")
 
 # Custom CSS for back and forth buttons to fit content
 st.markdown("""
