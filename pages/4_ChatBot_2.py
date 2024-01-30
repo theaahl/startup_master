@@ -8,7 +8,7 @@ from datetime import datetime
 from st_pages import add_indentation,hide_pages, show_pages_from_config
 
 st.set_page_config(layout="wide") 
-show_pages_from_config()
+# show_pages_from_config()
 
 def local_css(file_name):
     with open(file_name) as f:

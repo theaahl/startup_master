@@ -7,7 +7,7 @@ from streamlit_extras.switch_page_button import switch_page
 
 st.set_page_config(layout = "wide")
 
-show_pages_from_config()
+# show_pages_from_config()
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
