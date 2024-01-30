@@ -6,7 +6,8 @@ duckduckgo-search
 anthropic>=0.3.0
 trubrics>=1.4.3
 streamlit-feedback
-#pymongo==3.12
-pymongo[srv]
+pymongo==3.12
+dnspython==1.16.0
+#pymongo[srv]
 extra_streamlit_components>=0.1.60
 streamlit_extras>=0.3.6
