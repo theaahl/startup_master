@@ -9,6 +9,12 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
+local_css("./styles.css")
+add_indentation()
+hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
+
+
+
 @st.cache_resource(experimental_allow_widgets=True)
 def get_manager():
     return stx.CookieManager()
@@ -20,12 +26,7 @@ with st.spinner('Loading page'):
 user_consent_cookie = cookie_manager.get(cookie="kjeks")
 
 
-local_css("./styles.css")
 ####### SIDEBAR #######
-add_indentation()
-hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
-
-
 with st.sidebar:
     st.write("Your tasks")
     with st.expander("Task 1", expanded=True):

@@ -24,7 +24,7 @@ with st.spinner('Loading page'):
 
 # Fetch a specific cookie
 user_consent_cookie = cookie_manager.get(cookie="kjeks")
-
+print(user_consent_cookie, "hello")
 #### SIDEBAR ####
 with st.sidebar:
     st.write("Your tasks")

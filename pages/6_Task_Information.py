@@ -55,7 +55,7 @@ st.markdown("""
             """, unsafe_allow_html=True)
 
 
-@st.cache_resource #(experimental_allow_widgets=True)
+@st.cache_resource(experimental_allow_widgets=True)
 def get_manager():
     return stx.CookieManager()
 
@@ -95,7 +95,7 @@ hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
 with st.sidebar:
     st.write("Your tasks")
     with st.expander("Task 1", expanded=True):
-        if st.session_state['cookies']:
+        if user_consent_cookie:
             task_info = f"""
             <a href="Task_Information" target = "_self">
             <button class="clicked">
