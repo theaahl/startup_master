@@ -2,20 +2,59 @@ import streamlit as st
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 from st_pages import add_indentation,hide_pages
+from streamlit_extras.switch_page_button import switch_page
 
-
+st.set_page_config(layout = "wide")
 
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 local_css("./styles.css")
+
+
+st.markdown("""
+            <style>
+                div[data-testid="column"] {
+                    width: fit-content !important;
+                    flex: unset;
+                }
+                div[data-testid="column"] * {
+                    width: fit-content !important;
+                }
+            </style>
+            """, unsafe_allow_html=True)
+
+
+### Custom CSS for the sticky header
+st.markdown(
+    """
+<style>
+    div[data-testid="stVerticalBlock"] div:has(div.fixed-header) {
+        position: sticky;
+        top: 2.875rem;
+        background-color: white;
+        z-index: 999;
+    }
+</style>
+    """,
+    unsafe_allow_html=True
+)
+st.markdown("""
+            <style>
+                div[data-testid="column"] {
+                    width: fit-content !important;
+                    flex: unset;
+                }
+                div[data-testid="column"] * {
+                    width: fit-content !important;
+                }
+            </style>
+            """, unsafe_allow_html=True)
+
 ####### SIDEBAR #######
-# Either this or add_indentation() MUST be called on each page in your
-# app to add indendation in the sidebar
 add_indentation()
 hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
-#show_pages_from_config()
 
 with st.sidebar:
     st.write("Your tasks")
@@ -52,10 +91,21 @@ with st.sidebar:
             """
         st.markdown(feedback, unsafe_allow_html=True)
 
+#### HEADER ####
+header = st.container()
+header.header("Feedback")
 
+col1, col2 = header.columns([1,1])
+with col1:
+    if st.button("Previous step: Chatbot 2", type="secondary"):
+        switch_page("chatbot 2")
+with col2:
+    if st.button("Next step: None", type="primary", disabled=True):
+        switch_page("feedback")
 
+header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
 
-
+#### MAIN CONTENT ####
 @st.cache_resource
 def init_connection():
     return MongoClient(st.secrets.mongo.uri, server_api=ServerApi('1'))
