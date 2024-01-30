@@ -1,7 +1,11 @@
+import datetime
+import uuid
 import streamlit as st
 from st_pages import add_indentation, hide_pages
 from streamlit_extras.switch_page_button import switch_page
 import extra_streamlit_components as stx
+import time
+
 
 st.set_page_config(layout = "wide")
 
@@ -51,7 +55,7 @@ st.markdown("""
             """, unsafe_allow_html=True)
 
 
-@st.cache_resource(experimental_allow_widgets=True)
+@st.cache_resource #(experimental_allow_widgets=True)
 def get_manager():
     return stx.CookieManager()
 
@@ -61,6 +65,28 @@ cookie_manager.get_all()
 # Fetch a specific cookie
 user_consent_cookie = cookie_manager.get(cookie="kjeks")
 
+
+
+
+# cookie_manager = get_manager()
+# start_time = time.time()
+# timeout = 0.01  # Preset timeout time
+# while True:
+#     if 'cookies' not in st.session_state:
+#         st.session_state['cookies'] = cookie_manager.get_all()
+#         time.sleep(2)
+#     #elif time.time() - start_time > timeout:
+#      #   st.warning("Operation timeout. Please refresh the page or check your network connection.")
+#       #  break  # If timed out, exit the loop directly
+#     else:
+#         if 'lzs_userid' not in st.session_state.cookies:
+#             if 'lzs_userid' not in st.session_state:
+#                 st.session_state["lzs_userid"] = str(uuid.uuid4())
+#             cookie_manager.set('lzs_userid', st.session_state["lzs_userid"], key="0", expires_at=datetime.datetime(year=2023, month=8, day=2))
+#             print("hei", st.session_state["lzs_userid"])
+#         break
+
+    
 ####### SIDEBAR #######
 add_indentation()
 hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
@@ -69,7 +95,7 @@ hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
 with st.sidebar:
     st.write("Your tasks")
     with st.expander("Task 1", expanded=True):
-        if user_consent_cookie:
+        if st.session_state['cookies']:
             task_info = f"""
             <a href="Task_Information" target = "_self">
             <button class="clicked">

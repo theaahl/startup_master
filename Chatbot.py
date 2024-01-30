@@ -1,7 +1,7 @@
 import streamlit as st
 from st_pages import add_indentation, hide_pages
 import extra_streamlit_components as stx
-
+import time
 st.set_page_config(layout="wide") 
 
 
@@ -15,6 +15,8 @@ def get_manager():
 
 cookie_manager = get_manager()
 cookie_manager.get_all()
+with st.spinner('Loading page'):
+    time.sleep(0.2)
 user_consent_cookie = cookie_manager.get(cookie="kjeks")
 
 
