@@ -2,6 +2,8 @@ import streamlit as st
 from st_pages import add_indentation, hide_pages
 from streamlit_extras.switch_page_button import switch_page
 import extra_streamlit_components as stx
+from streamlit.components.v1 import html
+from urllib.parse import urlparse, parse_qs
 
 def local_css(file_name):
     with open(file_name) as f:
@@ -26,7 +28,7 @@ st.markdown("""
             </style>
             """, unsafe_allow_html=True)
 
-@st.cache_resource
+@st.cache_resource(experimental_allow_widgets=True)
 def get_manager():
     return stx.CookieManager()
 
@@ -144,3 +146,7 @@ with col2:
         switch_page("chatbot 1")
 
 header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
+
+
+
+st.info('Please read the task carefully to make sure you know how to communicate with ChatGPT in the next step')

@@ -2,7 +2,6 @@ import json
 from openai import OpenAI
 import streamlit as st
 #from streamlit_option_menu import option_menu
-from streamlit_extras.switch_page_button import switch_page
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 from datetime import datetime
@@ -106,8 +105,9 @@ st.markdown("""
             </style>
             """, unsafe_allow_html=True)
 
-s = f"<p style='color:red;'>Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information.</p>"
-header.markdown(s, unsafe_allow_html=True) 
+header.warning('Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information')
+# s = f"<p style='color:red;'>Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information.</p>"
+# header.markdown(s, unsafe_allow_html=True) 
 header.header("Chatbot 1")
 #st.markdown(title_style,unsafe_allow_html=True)
 col1, col2 = header.columns([1,1])

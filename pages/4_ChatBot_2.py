@@ -6,7 +6,6 @@ from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 from datetime import datetime
 from st_pages import add_indentation,hide_pages
-from st_click_detector import click_detector
 
 st.set_page_config(layout="wide") 
 
@@ -108,8 +107,9 @@ st.markdown("""
             </style>
             """, unsafe_allow_html=True)
 
-s = f"<p style='color:red;'>Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information.</p>"
-header.markdown(s, unsafe_allow_html=True) 
+header.warning('Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information')
+#s = f"<p style='color:red;'>Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information.</p>"
+#header.markdown(s, unsafe_allow_html=True) 
 header.header("Chatbot 2")
 #st.markdown(title_style,unsafe_allow_html=True)
 col1, col2 = header.columns([1,1])

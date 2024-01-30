@@ -18,11 +18,11 @@ hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
 
 
 
-@st.cache_resource
+@st.cache_resource(experimental_allow_widgets=True)
 def get_manager():
     return stx.CookieManager()
 
-cookie_manager = get_manager()
+cookie_manager = get_manager
 cookie_manager.get_all()
 
 # Fetch a specific cookie
