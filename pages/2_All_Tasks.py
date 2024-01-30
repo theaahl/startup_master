@@ -22,7 +22,7 @@ def get_manager():
 cookie_manager = get_manager()
 cookie_manager.get_all()
 with st.spinner('Loading page'):
-    time.sleep(0.2)
+    time.sleep(2)
 
 # Fetch a specific cookie
 user_consent_cookie = cookie_manager.get(cookie="kjeks")
