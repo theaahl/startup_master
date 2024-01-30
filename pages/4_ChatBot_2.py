@@ -5,10 +5,10 @@ from streamlit_extras.switch_page_button import switch_page
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 from datetime import datetime
-from st_pages import add_indentation,hide_pages
+from st_pages import add_indentation,hide_pages, show_pages_from_config
 
 st.set_page_config(layout="wide") 
-
+show_pages_from_config()
 
 def local_css(file_name):
     with open(file_name) as f:

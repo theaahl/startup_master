@@ -6,9 +6,10 @@ from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 from datetime import datetime
 import uuid
-from st_pages import add_indentation,hide_pages
+from st_pages import add_indentation,hide_pages, show_pages_from_config
 from streamlit_extras.switch_page_button import switch_page
 
+show_pages_from_config()
 
 st.set_page_config(layout = "wide")
 
