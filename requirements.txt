@@ -8,4 +8,4 @@ trubrics>=1.4.3
 streamlit-feedback
 pymongo==3.12
 extra_streamlit_components>=0.1.60
-streamlit_extras<=0.3.6
+streamlit_extras>=0.3.6
