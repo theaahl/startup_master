@@ -6,3 +6,4 @@ anthropic>=0.3.0
 trubrics>=1.4.3
 streamlit-feedback
 pymongo==3.12
+st_pages
