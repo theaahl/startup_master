@@ -1,5 +1,5 @@
 [[pages]]
-path = "pages/1_Home.py"
+path = "Chatbot.py"
 name = "Home"
 icon = "🏠"
 
@@ -25,5 +25,6 @@ name = "Chatbot_2"
 [[pages]]
 path = "pages/5_Feedback.py"
 name = "Feedback"
+is_section=true
 
 

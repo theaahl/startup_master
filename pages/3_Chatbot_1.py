@@ -2,14 +2,13 @@ import json
 from openai import OpenAI
 import streamlit as st
 #from streamlit_option_menu import option_menu
-from streamlit_extras.switch_page_button import switch_page
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 from datetime import datetime
 import uuid
 from st_pages import add_indentation,hide_pages
 import extra_streamlit_components as stx
-import time
+from streamlit_extras.switch_page_button import switch_page
 
 st.set_page_config(layout = "wide")
 
@@ -18,6 +17,19 @@ def local_css(file_name):
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 local_css("./styles.css")
+
+st.markdown("""
+            <style>
+                div[data-testid="column"] {
+                    width: fit-content !important;
+                    flex: unset;
+                }
+                div[data-testid="column"] * {
+                    width: fit-content !important;
+                }
+            </style>
+            """, unsafe_allow_html=True)
+
 ####### SIDEBAR #######
 # Either this or add_indentation() MUST be called on each page in your
 # app to add indendation in the sidebar
@@ -35,7 +47,7 @@ with st.sidebar:
         </button></a>
             """
         st.markdown(task_info, unsafe_allow_html=True)
-
+        
         c1 = f"""
         <a href="Chatbot_1" target = "_self">
         <button class="clicked">
@@ -61,87 +73,49 @@ with st.sidebar:
         st.markdown(feedback, unsafe_allow_html=True)
 
 
-previous_button_style = """
-    <style>
-    button[kind="primary"]{
-        background-color : #31B0D5;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 4px;
-        border-color: #46b8da;
-        text-decoration: none;
-        cursor: pointer;
-        position: fixed;
-        top: 160px;
-        left: 500px;
-    }
-    </style>
+header = st.container()
+
+### Custom CSS for the sticky header
+st.markdown(
     """
-next_button_style = """
-    <style>
-    button[kind="secondary"] {
-        background-color : #31B0D5;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 4px;
-        border-color: #46b8da;
-        text-decoration: none;
-        cursor: pointer;
-        position: fixed;
-        top: 160px;
-        right: 500px;
-    }
-    </style>
-    """
-title_style = """
 <style>
-    #title {
-        background-color : white;
-        color: black;
-        position: fixed;
-        top: 100px;
-        left: 700px;
-        font-size: 40px;
+    div[data-testid="stVerticalBlock"] div:has(div.fixed-header) {
+        position: sticky;
+        top: 2.875rem;
+        background-color: white;
+        z-index: 999;
     }
 </style>
+    """,
+    unsafe_allow_html=True
+)
+st.markdown("""
+            <style>
+                div[data-testid="column"] {
+                    width: fit-content !important;
+                    flex: unset;
+                }
+                div[data-testid="column"] * {
+                    width: fit-content !important;
+                }
+            </style>
+            """, unsafe_allow_html=True)
 
-<div id="title">
-<text >💬 Chatbot 1</text>
-</div>
-"""
-alert_text_style = """
-<style>
-    #alert {
-        position: fixed;
-        top: 50px;
-        left: 500px;
-        background-color : white;
-        color: red;
-    }
-</style>
+header.warning('Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information')
+# s = f"<p style='color:red;'>Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information.</p>"
+# header.markdown(s, unsafe_allow_html=True) 
+header.header("Chatbot 1")
+#st.markdown(title_style,unsafe_allow_html=True)
+col1, col2 = header.columns([1,1])
+with col1:
+    if st.button("Previous step: Task Information", type="secondary"):
+        switch_page("task information")
+with col2:
+    if st.button("Next step: Chatbot 2", type="primary"):
+        switch_page("chatbot 2")
 
-<div id="alert">
-<text>Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information.</text>
-</div>
-"""
+header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
 
-with st.sidebar:
-    openai_api_key = st.text_input("OpenAI API Key", key="chatbot_api_key", type="password")
-    "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
-    "[View the source code](https://github.com/streamlit/llm-examples/blob/main/Chatbot.py)"
-    "[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/streamlit/llm-examples?quickstart=1)"
-
-st.markdown(alert_text_style, unsafe_allow_html=True)
-st.markdown(title_style, unsafe_allow_html=True)
-
-if st.button("Previous step: Information", type="primary"):
-    switch_page("Chatbot 1")
-
-if st.button("Next step: Chatbot 2", type="secondary"):
-    switch_page("Chatbot 2")
-
-st.markdown(previous_button_style, unsafe_allow_html=True,)
-st.markdown(next_button_style, unsafe_allow_html=True,)
 
 @st.cache_resource
 def get_manager():
