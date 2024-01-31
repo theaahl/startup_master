@@ -1,7 +1,11 @@
+from openai import OpenAI
 import streamlit as st
 from st_pages import add_indentation, hide_pages,show_pages_from_config
 import extra_streamlit_components as stx
+import uuid
 import time
+
+
 st.set_page_config(layout="wide") 
 # show_pages_from_config()
 
@@ -14,7 +18,6 @@ add_indentation()
 hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
 
 
-
 @st.cache_resource(experimental_allow_widgets=True)
 def get_manager():
     return stx.CookieManager()
@@ -23,14 +26,17 @@ cookie_manager = get_manager()
 cookie_manager.get_all()
 with st.spinner('Loading page'):
     time.sleep(2)
-user_consent_cookie = cookie_manager.get(cookie="kjeks")
+
+# Fetch a specific cookie
+userid_cookie = cookie_manager.get(cookie="userid")
+
 
 
 ####### SIDEBAR #######
 with st.sidebar:
     st.write("Your tasks")
     with st.expander("Task 1", expanded=True):
-        if user_consent_cookie:
+        if userid_cookie:
             task_info = f"""
             <a href="Task_Information" target = "_self">
             <button class="not_clicked">
@@ -105,6 +111,8 @@ c = st.container()
 script = """<div id = 'chat_outer'></div>"""
 st.markdown(script, unsafe_allow_html=True)
 
+# Fetch a specific cookie
+# user_consent_cookie = cookie_manager.get(cookie="kjeks")
 
 # Create a main container
 main_container = st.container()
@@ -117,7 +125,7 @@ with main_container:
     # Create a sub-container for the button
     button_container = st.empty()
 
-    if user_consent_cookie:
+    if userid_cookie:
         # User has already given consent
         button_container.button('Thank you for your consent', disabled=True)
     else:
@@ -126,8 +134,8 @@ with main_container:
 
         if consent_button:
             # Set the consent cookie when the button is clicked
-            cookie_manager.set("kjeks", "consent")
-
+            cookie_manager.set("userid", str(uuid.uuid4()))
+            
 
 
 
