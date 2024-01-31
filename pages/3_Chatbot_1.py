@@ -18,6 +18,7 @@ def local_css(file_name):
 
 local_css("./styles.css")
 
+# Custom CSS for back and forth buttons to fit content
 st.markdown("""
             <style>
                 div[data-testid="column"] {
@@ -30,12 +31,37 @@ st.markdown("""
             </style>
             """, unsafe_allow_html=True)
 
+### Custom CSS for the sticky header
+st.markdown(
+    """
+<style>
+    div[data-testid="stVerticalBlock"] div:has(div.fixed-header) {
+        position: sticky;
+        top: 2.875rem;
+        background-color: white;
+        z-index: 999;
+    }
+</style>
+    """,
+    unsafe_allow_html=True
+)
+st.markdown("""
+            <style>
+                div[data-testid="column"] {
+                    width: fit-content !important;
+                    flex: unset;
+                }
+                div[data-testid="column"] * {
+                    width: fit-content !important;
+                }
+            </style>
+            """, unsafe_allow_html=True)
+
+
+
 ####### SIDEBAR #######
-# Either this or add_indentation() MUST be called on each page in your
-# app to add indendation in the sidebar
 add_indentation()
 hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
-#show_pages_from_config()
 
 with st.sidebar:
     st.write("Your tasks")
@@ -72,40 +98,10 @@ with st.sidebar:
             """
         st.markdown(feedback, unsafe_allow_html=True)
 
-
+### HEADER ###
 header = st.container()
-
-### Custom CSS for the sticky header
-st.markdown(
-    """
-<style>
-    div[data-testid="stVerticalBlock"] div:has(div.fixed-header) {
-        position: sticky;
-        top: 2.875rem;
-        background-color: white;
-        z-index: 999;
-    }
-</style>
-    """,
-    unsafe_allow_html=True
-)
-st.markdown("""
-            <style>
-                div[data-testid="column"] {
-                    width: fit-content !important;
-                    flex: unset;
-                }
-                div[data-testid="column"] * {
-                    width: fit-content !important;
-                }
-            </style>
-            """, unsafe_allow_html=True)
-
 header.warning('Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information')
-# s = f"<p style='color:red;'>Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information.</p>"
-# header.markdown(s, unsafe_allow_html=True) 
 header.header("Chatbot 1")
-#st.markdown(title_style,unsafe_allow_html=True)
 col1, col2 = header.columns([1,1])
 with col1:
     if st.button("Previous step: Task Information", type="secondary"):
@@ -116,6 +112,13 @@ with col2:
 
 header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
 
+
+
+### MAIN CONTENT ###
+# Generate a random UUID (UUID4)
+if 'user_id' not in st.session_state:
+    st.session_state['user_id'] = str(uuid.uuid4())
+    print(st.session_state.user_id)
 
 @st.cache_resource
 def get_manager():

@@ -8,8 +8,6 @@ path = "pages/2_All_Tasks.py"
 name = "All Tasks"
 icon = ":books:"
 
-
-# Pages after an `is_section = true` will be indented
 [[pages]]
 path = "pages/6_Task_Information.py"
 name = "Task_Information"
