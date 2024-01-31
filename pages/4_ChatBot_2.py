@@ -1,11 +1,11 @@
 import streamlit as st
 from openai import OpenAI
-#from streamlit_option_menu import option_menu
 from streamlit_extras.switch_page_button import switch_page
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 from datetime import datetime
 from st_pages import add_indentation,hide_pages
+import extra_streamlit_components as stx
 
 
 st.set_page_config(layout="wide") 
@@ -140,6 +140,11 @@ st.markdown(previous_button_style, unsafe_allow_html=True,)
 st.markdown(next_button_style, unsafe_allow_html=True,)
 
 @st.cache_resource
+def get_manager():
+    return stx.CookieManager()
+
+cookie_manager = get_manager()    
+
 def init_connection():
     return MongoClient(st.secrets.mongo.uri, server_api=ServerApi('1'))
 
@@ -160,36 +165,43 @@ def get_chatlog():
     return log
 
 def get_userchat(chatlog):
-    userchat = {"Task-1":{"id": str(st.session_state.user_id), "time": datetime.now(), "Chatbot-2": chatlog}}
+    userchat = {"Task-1":{"id": cookie_manager.get(cookie="userid"), "time": datetime.now(), "Chatbot-2": chatlog}}
     return userchat
 
 def update_chat_db():
     db = client.test_db 
     chatlog = get_chatlog()
     
-    print(len(list(db.test_chat.find({"Task-1.id": st.session_state.user_id}))))
-    print(st.session_state.user_id)
+    print(len(list(db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))))
 
-    if len(list(db.test_chat.find({"Task-1.id": st.session_state.user_id}))) > 0:
+    if len(list(db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
         print("opdaterte chatobjekt")
-        db.test_chat.update_one({"Task-1.id": st.session_state.user_id}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-2": chatlog}})
+        db.test_chat.update_one({"Task-1.id": cookie_manager.get(cookie="userid")}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-2": chatlog}})
     else:
         write_data(get_userchat(chatlog))
         print("lagret ny chatobjekt")
 
-    print(st.session_state.user_id)
-
-# savebutton = st.button("Save chat")
-
-# if savebutton:
-#     chatlog = get_userchat(get_chatlog())
-#     write_data(chatlog)
-#     db = client.test_db 
-#     print(len(list(db.test_chat.find({"Task-1.id": str(st.session_state.user_id)}))))
-
 
 if "chatbot2_messages" not in st.session_state:
-    st.session_state["chatbot2_messages"] = [{"role": "assistant", "content": "How can I help you?"}]
+    db = client.test_db 
+
+    chatlog = []
+
+    if len(list(db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
+        chatlog = db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-2")
+
+    print(len(chatlog))
+    if len(chatlog) > 0:
+        chatlog = db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-2")
+        msg_count = 0
+        st.session_state["chatbot2_messages"] = []
+        for msg in chatlog[0]:            
+            st.session_state.chatbot2_messages.append({"role": chatlog[0][str(msg_count)]['role'], "content": chatlog[0][str(msg_count)]['content']})
+            print(msg)
+            msg_count += 1
+
+    else:
+        st.session_state["chatbot2_messages"] = [{"role": "assistant", "content": "How can I help you?"}]
 
 for msg in st.session_state.chatbot2_messages:
     st.chat_message(msg["role"]).write(msg["content"])

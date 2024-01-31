@@ -2,6 +2,8 @@ from openai import OpenAI
 import streamlit as st
 from st_pages import add_indentation, hide_pages
 import extra_streamlit_components as stx
+import uuid
+import time
 
 st.set_page_config(layout="wide") 
 
@@ -91,7 +93,8 @@ script = """<div id = 'chat_outer'></div>"""
 st.markdown(script, unsafe_allow_html=True)
 
 # Fetch a specific cookie
-user_consent_cookie = cookie_manager.get(cookie="kjeks")
+# user_consent_cookie = cookie_manager.get(cookie="kjeks")
+userid_cookie = cookie_manager.get(cookie="userid")
 
 # Create a main container
 main_container = st.container()
@@ -103,7 +106,7 @@ with main_container:
     # Create a sub-container for the button
     button_container = st.empty()
 
-    if user_consent_cookie:
+    if userid_cookie:
         # User has already given consent
         button_container.button('Thank you for your consent', disabled=True)
     else:
@@ -112,7 +115,11 @@ with main_container:
 
         if consent_button:
             # Set the consent cookie when the button is clicked
-            cookie_manager.set("kjeks", "consent")
+            # cookie_manager.set("kjeks", "consent")
+            cookie_manager.set("userid", str(uuid.uuid4()))
+            
+# if cookie_manager.get(cookie="userid") is not None:
+#     cookie_manager.set("kjeks", "consent")
 
 
 st.header("Information about the project")
