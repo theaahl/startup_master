@@ -9,6 +9,7 @@ import uuid
 from st_pages import add_indentation,hide_pages
 import extra_streamlit_components as stx
 from streamlit_extras.switch_page_button import switch_page
+import time
 
 st.set_page_config(layout = "wide")
 
@@ -122,6 +123,9 @@ def get_manager():
     return stx.CookieManager()
 
 cookie_manager = get_manager()
+cookie_manager.get_all()
+
+time.sleep(1)
 
 # #st.subheader("All Cookies:")
 # cookies = cookie_manager.get_all()
@@ -163,9 +167,11 @@ def init_connection():
 
 client = init_connection()
 
+print("chatbot 1 cookie", cookie_manager.get(cookie="userid"))
+
 def write_data(mydict):
     db = client.test_db #establish connection to the 'test_db' db
-    items = db.test_chat # return all result from the 'test_chats' collection
+    items = db.chat # return all result from the 'test_chats' collection
     items.insert_one(mydict)
 
 def get_chatlog():
@@ -185,26 +191,25 @@ def update_chat_db():
     db = client.test_db 
     chatlog = get_chatlog()
     
-    print(len(list(db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))))
+    print(len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))))
 
-    if len(list(db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
+    if len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
         print("opdaterte chatobjekt")
-        db.test_chat.update_one({"Task-1.id": cookie_manager.get(cookie="userid")}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-1": chatlog}})
+        db.chat.update_one({"Task-1.id": cookie_manager.get(cookie="userid")}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-1": chatlog}})
     else:
         write_data(get_userchat(chatlog))
         print("lagret ny chatobjekt")
-
 
 if "chatbot1_messages" not in st.session_state:
     db = client.test_db 
     chatlog = []
 
-    if len(list(db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
-        chatlog = db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-1")
 
-    print(len(chatlog))
+    if len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
+        chatlog = db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-1")
+
     if len(chatlog) > 0:
-        chatlog = db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-1")
+        chatlog = db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-1")
         msg_count = 0
         st.session_state["chatbot1_messages"] = []
         for msg in chatlog[0]:
@@ -214,20 +219,21 @@ if "chatbot1_messages" not in st.session_state:
 
     else:
         st.session_state["chatbot1_messages"] = [{"role": "assistant", "content": "How can I help you?"}]
-
+        
 for msg in st.session_state.chatbot1_messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
 if prompt := st.chat_input():
-    # if not openai_api_key:
-    #     st.info("Please add your OpenAI API key to continue.")
-    #     st.stop()
+    if not st.secrets.api.key: #openai_api_key:
+        st.info("Please add your OpenAI API key to continue.")
+        st.stop()
 
-    #client = OpenAI(api_key=openai_api_key)
+    APIclient = OpenAI(api_key=st.secrets.api.key)
     st.session_state.chatbot1_messages.append({"role": "user", "content": prompt})
+
     st.chat_message("user").write(prompt)
-    #response = client.chat.completions.create(model="gpt-3.5-turbo", chatbot1_messages=st.session_state.chatbot1_messages)
-    msg = "hello" #response.choices[0].message.content
+    response = APIclient.chat.completions.create(model="gpt-3.5-turbo", messages=st.session_state.chatbot1_messages)
+    msg = response.choices[0].message.content
     st.session_state.chatbot1_messages.append({"role": "assistant", "content": msg})
     st.chat_message("assistant").write(msg)
     
