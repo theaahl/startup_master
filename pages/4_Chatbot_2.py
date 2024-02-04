@@ -6,6 +6,7 @@ from pymongo.server_api import ServerApi
 from datetime import datetime
 from st_pages import add_indentation,hide_pages
 import extra_streamlit_components as stx
+import time
 
 st.set_page_config(layout="wide") 
 
@@ -122,11 +123,13 @@ with col2:
 
 header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
 
-@st.cache_resource
+@st.cache_resource(experimental_allow_widgets=True)
 def get_manager():
     return stx.CookieManager()
 
 cookie_manager = get_manager()    
+
+time.sleep(1)
 
 def init_connection():
     return MongoClient(st.secrets.mongo.uri, server_api=ServerApi('1'))
@@ -135,7 +138,7 @@ client = init_connection()
 
 def write_data(mydict):
     db = client.test_db #establish connection to the 'test_db' db
-    items = db.test_chat # return all result from the 'test_chats' collection
+    items = db.chat # return all result from the 'chats' collection
     items.insert_one(mydict)
 
 def get_chatlog():
@@ -155,11 +158,11 @@ def update_chat_db():
     db = client.test_db 
     chatlog = get_chatlog()
     
-    print(len(list(db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))))
+    print(len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))))
 
-    if len(list(db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
+    if len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
         print("opdaterte chatobjekt")
-        db.test_chat.update_one({"Task-1.id": cookie_manager.get(cookie="userid")}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-2": chatlog}})
+        db.chat.update_one({"Task-1.id": cookie_manager.get(cookie="userid")}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-2": chatlog}})
     else:
         write_data(get_userchat(chatlog))
         print("lagret ny chatobjekt")
@@ -170,12 +173,12 @@ if "chatbot2_messages" not in st.session_state:
 
     chatlog = []
 
-    if len(list(db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
-        chatlog = db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-2")
+    if len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
+        chatlog = db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-2")
 
     print(len(chatlog))
     if len(chatlog) > 0:
-        chatlog = db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-2")
+        chatlog = db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-2")
         msg_count = 0
         st.session_state["chatbot2_messages"] = []
         for msg in chatlog[0]:            
@@ -190,15 +193,15 @@ for msg in st.session_state.chatbot2_messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
 if prompt := st.chat_input():
-    # if not openai_api_key:
-    #     st.info("Please add your OpenAI API key to continue.")
-    #     st.stop()
+    if not st.secrets.api.key:
+        st.info("Please add your OpenAI API key to continue.")
+        st.stop()
 
-    #client = OpenAI(api_key=openai_api_key)
+    APIclient = OpenAI(api_key=st.secrets.api.key)
     st.session_state.chatbot2_messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
-    #response = client.chat.completions.create(model="gpt-3.5-turbo", chatbot2_messages=st.session_state.chatbot2_messages)
-    msg = "hello" #response.choices[0].message.content
+    response = APIclient.chat.completions.create(model="gpt-4", messages=st.session_state.chatbot2_messages)
+    msg = response.choices[0].message.content
     st.session_state.chatbot2_messages.append({"role": "assistant", "content": msg})
     st.chat_message("assistant").write(msg)
 

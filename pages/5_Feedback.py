@@ -93,8 +93,7 @@ with st.sidebar:
             """
         st.markdown(feedback, unsafe_allow_html=True)
 
-#### HEADER ####
-@st.cache_resource
+@st.cache_resource(experimental_allow_widgets=True)
 def get_manager():
     return stx.CookieManager()
 
@@ -133,7 +132,7 @@ init_cookies()
 
 def write_data(mydict):
     db = client.test_db #establish connection to the 'sample_guide' db
-    items = db.test_chat # return all result from the 'planets' collection
+    items = db.chat # return all result from the 'planets' collection
     items.insert_one(mydict)
 
 def get_user_feedback(feedback):
@@ -144,11 +143,14 @@ def update_chat_db(feedback):
     db = client.test_db 
     user_feedback = get_user_feedback(feedback)
     
-    print(len(list(db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))))
+    print("feedback:", user_feedback)
+    print("userid:", cookie_manager.get(cookie="userid"))
 
-    if len(list(db.test_chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
+    print(len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))))
+
+    if len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
         print("opdaterte chatobjekt")
-        db.test_chat.update_one({"Task-1.id": cookie_manager.get(cookie="userid")}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Feedback": feedback}})
+        db.chat.update_one({"Task-1.id": cookie_manager.get(cookie="userid")}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Feedback": feedback}})
     else:
         write_data(user_feedback)
         print("lagret ny chatobjekt")
@@ -199,7 +201,6 @@ def disable():
     
 #------------- Form ------------------------   
     
-st.header("Feedback form")
 st.caption("Please rate your experience with the chat based on the following criteria:")
 
 selectionbox_options = ["Not at all", "Somewhat", "Very well"]
