@@ -123,7 +123,7 @@ with col2:
 
 header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
 
-@st.cache_resource
+@st.cache_resource(experimental_allow_widgets=True)
 def get_manager():
     return stx.CookieManager()
 
