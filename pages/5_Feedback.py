@@ -203,7 +203,7 @@ def disable():
     
 st.caption("Please rate your experience with the chat based on the following criteria:")
 
-selectionbox_options = ["Not at all", "Somewhat", "Very well"]
+selectionbox_options = ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"]
 
 def get_selected_option(cookie):
   value = cookie_manager.get(cookie)
