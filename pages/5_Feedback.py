@@ -15,18 +15,28 @@ def local_css(file_name):
 local_css("./styles.css")
 
 
-st.markdown("""
-            <style>
-                div[data-testid="column"] {
-                    width: fit-content !important;
-                    flex: unset;
-                }
-                div[data-testid="column"] * {
-                    width: fit-content !important;
-                }
-            </style>
-            """, unsafe_allow_html=True)
+@st.cache_resource(experimental_allow_widgets=True)
+def get_manager():
+    return stx.CookieManager()
 
+cookie_manager = get_manager()   
+
+@st.cache_resource
+def init_connection():
+    return MongoClient(st.secrets.mongo.uri, server_api=ServerApi('1'))
+
+client = init_connection()
+
+def init_cookies():
+  states = ["c1_option_1", "c1_txt_1", "c1_option_2", "c1_txt_2", "c2_option_1", "c2_txt_1", "c2_option_2", "c2_txt_2", "c3_option_1", "c3_txt_1", "c3_option_2", "c3_txt_2", "c4_txt_1", "c4_txt_2","final"]
+
+  key_count = 1
+  for state in states:
+    if cookie_manager.get(state) is None:
+      cookie_manager.set(state, "", key=key_count)
+    key_count += 1
+
+init_cookies()
 
 ### Custom CSS for the sticky header
 st.markdown(
@@ -93,11 +103,6 @@ with st.sidebar:
             """
         st.markdown(feedback, unsafe_allow_html=True)
 
-@st.cache_resource(experimental_allow_widgets=True)
-def get_manager():
-    return stx.CookieManager()
-
-cookie_manager = get_manager()   
 
 header = st.container()
 header.header("Feedback")
@@ -113,22 +118,6 @@ with col2:
 header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
 
 #### MAIN CONTENT ####
-@st.cache_resource
-def init_connection():
-    return MongoClient(st.secrets.mongo.uri, server_api=ServerApi('1'))
-
-client = init_connection()
-
-def init_cookies():
-  states = ["c1_option_1", "c1_txt_1", "c1_option_2", "c1_txt_2", "c2_option_1", "c2_txt_1", "c2_option_2", "c2_txt_2", "c3_option_1", "c3_txt_1", "c3_option_2", "c3_txt_2", "final"]
-
-  key_count = 1
-  for state in states:
-    if cookie_manager.get(state) is None:
-      cookie_manager.set(state, "", key=key_count)
-    key_count += 1
-
-init_cookies()
 
 def write_data(mydict):
     db = client.test_db #establish connection to the 'sample_guide' db
@@ -190,6 +179,17 @@ def gather_feedback():
       }
     },
 
+    "usefull":{
+      "chatbot_1":{
+        "option":cookie_manager.get("c4_option_1"),
+        "comment":cookie_manager.get("c4_txt_1")
+      },
+      "chatbot_2":{
+        "option":cookie_manager.get("c4_option_2"),
+        "comment":cookie_manager.get("c4_txt_2")
+      }
+    },
+
     "final_comment":cookie_manager.get("final")
   }
 
@@ -212,23 +212,29 @@ def get_selected_option(cookie):
 #Correctness
 st.subheader("Correctness")
 with st.expander(":bulb:  Correctness explenation"): #Kan legge til ,True hvis den skal være åpen som default
-  st.write("Correctness indicates ..... .....")
+  # st.write("Correctness indicates ..... .....")
+  lst = ['The answer aligns with the literature and other sources as far as known for the user (factually correct).', 'The chatbot is able to understand the context, provide relevant information, and meet the user\'s expectations in a way that adds value to their specific objectives']
+  s = ''
+  for i in lst:
+      s += "- " + i + "\n"
+  st.markdown(s)
+
 
 st.markdown("**Chatbot 1**")
-c1_option_1 = st.selectbox('To what degre did you feel the answers you received... Correctness Chatbot 1',selectionbox_options,placeholder="Choose an option",index=get_selected_option("c1_option_1"))
+c1_option_1 = st.selectbox('​​To what degree did you feel the answers you received correspond with the **Correctness**-attribute for **Chatbot 1**',selectionbox_options,placeholder="Choose an option",index=get_selected_option("c1_option_1"))
 cookie_manager.set("c1_option_1", c1_option_1, key="c1_option_1")
 
 c1_txt_1 = st.text_area(
-"Comment on *Correctness* for **Chatbot 1**",
+"Comment on **Correctness** for **Chatbot 1**",
 value=cookie_manager.get("c1_txt_1"),placeholder="Comment"
 )
 cookie_manager.set("c1_txt_1", c1_txt_1, key="c1_txt_1")
 
 st.markdown("**Chatbot 2**")
-c1_option_2 = st.selectbox('To what degre did you feel the answers you received...Correctness Chatbot 2',selectionbox_options,placeholder="Choose an option",index=get_selected_option("c1_option_2"))
+c1_option_2 = st.selectbox('​​To what degree did you feel the answers you received correspond with the **Correctness**-attribute for **Chatbot 2**',selectionbox_options,placeholder="Choose an option",index=get_selected_option("c1_option_2"))
 cookie_manager.set("c1_option_2", c1_option_2, key="c1_option_2")
 c1_txt_2 = st.text_area(
-"Comment on *Correctness* for **Chatbot 2**",
+"Comment on **Correctness** for **Chatbot 2**",
 value=cookie_manager.get("c1_txt_2"),placeholder="Comment"
 )
 cookie_manager.set("c1_txt_2", c1_txt_2, key="c1_txt_2")
@@ -236,22 +242,27 @@ cookie_manager.set("c1_txt_2", c1_txt_2, key="c1_txt_2")
 #Completeness
 st.subheader("Completeness")
 with st.expander(":bulb:  Completeness explenation"):
-  st.write("Completeness indicates ..... .....")
+  # st.write("Completeness indicates ..... .....")
+  lst = ['The answers lacks no essential components', 'The chatbot answers all questions in the users prompt']
+  s = ''
+  for i in lst:
+      s += "- " + i + "\n"
+  st.markdown(s)
 
 st.markdown("**Chatbot 1**")
-c2_option_1 = st.selectbox('To what degre did you feel the answers you received... Completeness Chatbot 1',selectionbox_options,placeholder="Choose an option",index=get_selected_option("c2_option_1"))
+c2_option_1 = st.selectbox('​​To what degree did you feel the answers you received correspond with the **Completeness**-attribute for **Chatbot 1**',selectionbox_options,placeholder="Choose an option",index=get_selected_option("c2_option_1"))
 cookie_manager.set("c2_option_1", c2_option_1, key="c2_option_1")
 c2_txt_1 = st.text_area(
-"Comment on *Completeness* for **Chatbot 1**",
+"Comment on **Completeness** for **Chatbot 1**",
 value=cookie_manager.get("c2_txt_1"),placeholder="Comment"
 )
 cookie_manager.set("c2_txt_1", c2_txt_1, key="c2_txt_1")
 
 st.markdown("**Chatbot 2**")
-c2_option_2 = st.selectbox('To what degre did you feel the answers you received...Completeness Chatbot 2',selectionbox_options,placeholder="Choose an option",index=get_selected_option("c2_option_2"))
+c2_option_2 = st.selectbox('​​To what degree did you feel the answers you received correspond with the **Completeness**-attribute for **Chatbot 2**',selectionbox_options,placeholder="Choose an option",index=get_selected_option("c2_option_2"))
 cookie_manager.set("c2_option_2", c2_option_2, key="c2_option_2")
 c2_txt_2 = st.text_area(
-"Comment on  *Completeness* for **Chatbot 2**",
+"Comment on  **Completeness** for **Chatbot 2**",
 value=cookie_manager.get("c2_txt_2"),placeholder="Comment"
 )
 cookie_manager.set("c2_txt_2", c2_txt_2, key="c2_txt_2")
@@ -259,33 +270,68 @@ cookie_manager.set("c2_txt_2", c2_txt_2, key="c2_txt_2")
 #Consinstency
 st.subheader("Consinstency")
 with st.expander(":bulb:  Consinstency explenation"):
-  st.write("Consinstency indicates ..... .....")
+  #st.write("Consinstency indicates ..... .....")
+  lst = ['Consistency between input and response', 'No contradictions in the same answer (internal consistency)']
+  s = ''
+  for i in lst:
+      s += "- " + i + "\n"
+  st.markdown(s)
 
 st.markdown("**Chatbot 1**")
-c3_option_1 = st.selectbox('To what degre did you feel the answers you received...Consinstency Chatbot 1',selectionbox_options,placeholder="Choose an option",index=get_selected_option("c3_option_2"))
+c3_option_1 = st.selectbox('​To what degree did you feel the answers you received correspond with the **Consinstency**-attribute for **Chatbot 1**',selectionbox_options,placeholder="Choose an option",index=get_selected_option("c3_option_2"))
 cookie_manager.set("c3_option_1", c3_option_1, key="c3_option_1")
 c3_txt_1 = st.text_area(
-"Comment on *Consinstency* for **Chatbot 1**",
+"Comment on **Consinstency** for **Chatbot 1**",
 value=cookie_manager.get("c3_txt_1"),placeholder="Comment"
 )
 cookie_manager.set("c3_txt_1", c3_txt_1, key="c3_txt_1")
 
 st.markdown("**Chatbot 2**")
-c3_option_2 = st.selectbox('To what degre did you feel the answers you received...Consinstency Chatbot 2',selectionbox_options,placeholder="Choose an option",index=get_selected_option("c3_option_2"))
+c3_option_2 = st.selectbox('​To what degree did you feel the answers you received correspond with the **Consinstency**-attribute for **Chatbot 2**',selectionbox_options,placeholder="Choose an option",index=get_selected_option("c3_option_2"))
 cookie_manager.set("c3_option_2", c3_option_2, key="c3_option_2")
 c3_txt_2 = st.text_area(
-"Comment on  *Consinstency* for **Chatbot 2**",
+"Comment on  **Consinstency** for **Chatbot 2**",
 value=cookie_manager.get("c3_txt_2"),placeholder="Comment"
 )
 cookie_manager.set("c3_txt_2", c3_txt_2, key="c3_txt_2")
 
-#Consinstency
+
+#Usefulness
+st.subheader("Usefulness")
+with st.expander(":bulb:  Usefulness explenation"):
+  #st.write("Consinstency indicates ..... .....")
+  lst = ['The provided answers with valuable information (not too broad, not too unspecific) ', 'The chatbot delivered relevant information without too many user inputs']
+  s = ''
+  for i in lst:
+      s += "- " + i + "\n"
+  st.markdown(s)
+
+st.markdown("**Chatbot 1**")
+c4_option_1 = st.selectbox('​To what degree did you feel the answers you received correspond with the **Usefulness**-attribute for **Chatbot 1**',selectionbox_options,placeholder="Choose an option",index=get_selected_option("c3_option_2"))
+cookie_manager.set("c4_option_1", c3_option_1, key="c4_option_1")
+c4_txt_1 = st.text_area(
+"Comment on **Usefulness** for **Chatbot 1**",
+value=cookie_manager.get("c4_txt_1"),placeholder="Comment"
+)
+cookie_manager.set("c4_txt_1", c4_txt_1, key="c4_txt_1")
+
+st.markdown("**Chatbot 2**")
+c4_option_2 = st.selectbox('​To what degree did you feel the answers you received correspond with the **Usefulness**-attribute for **Chatbot 2**',selectionbox_options,placeholder="Choose an option",index=get_selected_option("c3_option_2"))
+cookie_manager.set("c4_option_2", c4_option_2, key="c4_option_2")
+c4_txt_2 = st.text_area(
+"Comment on  **Usefulness** for **Chatbot 2**",
+value=cookie_manager.get("c4_txt_2"),placeholder="Comment"
+)
+cookie_manager.set("c4_txt_2", c4_txt_2, key="c4_txt_2")
+
+
+#Final comments
 st.subheader("Final comments")
-c4_txt = st.text_area(
+final_txt = st.text_area(
 "Do you have any final comments that you would like us to know",
 value=cookie_manager.get("final"),placeholder="Comment"
 )
-cookie_manager.set("final", c4_txt, key="final")
+cookie_manager.set("final", final_txt, key="final")
 # Every form must have a submit button. Fix what happends on submit
 submitted = st.button(
   "Submit", on_click=disable, disabled=st.session_state.disabled

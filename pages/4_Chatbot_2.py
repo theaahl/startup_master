@@ -17,17 +17,17 @@ def local_css(file_name):
 
 local_css("./styles.css")
 
-st.markdown("""
-            <style>
-                div[data-testid="column"] {
-                    width: fit-content !important;
-                    flex: unset;
-                }
-                div[data-testid="column"] * {
-                    width: fit-content !important;
-                }
-            </style>
-            """, unsafe_allow_html=True)
+
+@st.cache_resource(experimental_allow_widgets=True)
+def get_manager():
+    return stx.CookieManager()
+
+cookie_manager = get_manager()    
+
+def init_connection():
+    return MongoClient(st.secrets.mongo.uri, server_api=ServerApi('1'))
+
+client = init_connection()
 
 ####### SIDEBAR #######
 # Either this or add_indentation() MUST be called on each page in your
@@ -80,7 +80,6 @@ with st.sidebar:
         st.markdown(feedback, unsafe_allow_html=True)
 
 
-header = st.container()
 
 ### Custom CSS for the sticky header
 st.markdown(
@@ -108,6 +107,7 @@ st.markdown("""
             </style>
             """, unsafe_allow_html=True)
 
+header = st.container()
 header.warning('Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information')
 #s = f"<p style='color:red;'>Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information.</p>"
 #header.markdown(s, unsafe_allow_html=True) 
@@ -123,18 +123,7 @@ with col2:
 
 header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
 
-@st.cache_resource(experimental_allow_widgets=True)
-def get_manager():
-    return stx.CookieManager()
-
-cookie_manager = get_manager()    
-
 time.sleep(1)
-
-def init_connection():
-    return MongoClient(st.secrets.mongo.uri, server_api=ServerApi('1'))
-
-client = init_connection()
 
 def write_data(mydict):
     db = client.test_db #establish connection to the 'test_db' db
