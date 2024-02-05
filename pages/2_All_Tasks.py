@@ -2,6 +2,10 @@ import streamlit as st
 from st_pages import add_indentation, hide_pages,show_pages_from_config
 import extra_streamlit_components as stx
 import time
+from streamlit_extras.switch_page_button import switch_page
+
+
+st.set_page_config(layout="wide") 
 
 # show_pages_from_config()
 def local_css(file_name):
@@ -96,3 +100,19 @@ with st.sidebar:
             </button></a>
                 """
             st.markdown(feedback, unsafe_allow_html=True)
+
+
+#### MAIN CONTENT ####
+
+st.title("All tasks")
+st.write("Here is a list of all the tasks created for this study. To start the study go to one of the tasks")
+
+st.header("Task 1: Task name")
+if st.button("Go to task", "t1"):
+    switch_page("task information")
+st.write("Task description")
+
+st.header("Task 2: Task name")
+if st.button("Go to task", "t2"):
+    switch_page("task information")
+st.write("Task description")

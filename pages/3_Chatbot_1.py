@@ -6,10 +6,10 @@ from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 from datetime import datetime
 import uuid
-from st_pages import add_indentation,hide_pages, show_pages_from_config
+from st_pages import add_indentation,hide_pages
+import extra_streamlit_components as stx
 from streamlit_extras.switch_page_button import switch_page
-
-# show_pages_from_config()
+import time
 
 st.set_page_config(layout = "wide")
 
@@ -114,22 +114,60 @@ with col2:
 header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
 
 
+@st.cache_resource(experimental_allow_widgets=True)
+def get_manager():
+    return stx.CookieManager()
 
-### MAIN CONTENT ###
-# Generate a random UUID (UUID4)
-if 'user_id' not in st.session_state:
-    st.session_state['user_id'] = str(uuid.uuid4())
-    print(st.session_state.user_id)
+cookie_manager = get_manager()
+cookie_manager.get_all()
 
-@st.cache_resource
+time.sleep(1)
+
+# #st.subheader("All Cookies:")
+# cookies = cookie_manager.get_all()
+# #st.write(cookies)
+# print(cookies)
+
+# # @st.cache_resource
+# # def get_manager():
+# #     return stx.CookieManager()
+
+# cookie_manager = get_manager()
+# # Generate a random UUID (UUID4)
+# if 'user_id' not in st.session_state:
+#     if len(cookie_manager.get(cookie="userid")) == 0:
+#         print("her")
+#         st.session_state['user_id'] = str(uuid.uuid4())
+#         #cookie = st.text_input("Cookie", key="1")
+#         cookie_manager.set("userid", st.session_state.user_id)
+    
+#     else:
+#         st.session_state['user_id'] = cookie_manager.get(cookie="userid")
+#     #cookie2 = st.text_input("Cookie", key="0")
+#     # print("kjeksoppskrift:")
+#     # all_cookies = cookie_manager.get_all()
+#     # print("starter klokke")
+#     # time.sleep(2)
+#     # print("klokke ferdig")
+
+#     # print(all_cookies)
+#     # print(cookie_manager.get(cookie="userid"))
+#     # print(st.session_state.user_id)
+#user_id = uuid.uuid4()
+# st.session_state['user_id'] = cookie_manager.get(cookie="userid")
+# print(cookie_manager.get(cookie="userid"))
+# print(st.session_state.user_id)
+
 def init_connection():
     return MongoClient(st.secrets.mongo.uri, server_api=ServerApi('1'))
 
 client = init_connection()
 
+print("chatbot 1 cookie", cookie_manager.get(cookie="userid"))
+
 def write_data(mydict):
     db = client.test_db #establish connection to the 'test_db' db
-    items = db.test_chat # return all result from the 'test_chats' collection
+    items = db.chat # return all result from the 'test_chats' collection
     items.insert_one(mydict)
 
 def get_chatlog():
@@ -142,51 +180,60 @@ def get_chatlog():
     return log
 
 def get_userchat(chatlog):
-    userchat = {"Task-1":{"id": str(st.session_state.user_id), "time": datetime.now(), "Chatbot-1": chatlog}}
+    userchat = {"Task-1":{"id": cookie_manager.get(cookie="userid"), "time": datetime.now(), "Chatbot-1": chatlog}}
     return userchat
 
 def update_chat_db():
     db = client.test_db 
     chatlog = get_chatlog()
     
-    print(len(list(db.test_chat.find({"Task-1.id": st.session_state.user_id}))))
-    print(st.session_state.user_id)
+    print(len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))))
 
-    if len(list(db.test_chat.find({"Task-1.id": st.session_state.user_id}))) > 0:
+    if len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
         print("opdaterte chatobjekt")
-        db.test_chat.update_one({"Task-1.id": st.session_state.user_id}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-1": chatlog}})
+        db.chat.update_one({"Task-1.id": cookie_manager.get(cookie="userid")}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-1": chatlog}})
     else:
         write_data(get_userchat(chatlog))
         print("lagret ny chatobjekt")
 
-    print(st.session_state.user_id)
-
-# savebutton = st.button("Save chat")
-
-# if savebutton:
-#     chatlog = get_userchat(get_chatlog())
-#     write_data(chatlog)
-#     db = client.test_db 
-#     print(len(list(db.test_chat.find({"Task-1.id": str(st.session_state.user_id)}))))
-
 if "chatbot1_messages" not in st.session_state:
-    st.session_state["chatbot1_messages"] = [{"role": "assistant", "content": "How can I help you?"}]
+    db = client.test_db 
+    chatlog = []
 
+
+    if len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
+        chatlog = db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-1")
+
+    if len(chatlog) > 0:
+        chatlog = db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-1")
+        msg_count = 0
+        st.session_state["chatbot1_messages"] = []
+        for msg in chatlog[0]:
+            st.session_state.chatbot1_messages.append({"role": chatlog[0][str(msg_count)]['role'], "content": chatlog[0][str(msg_count)]['content']})
+            print(msg)
+            msg_count += 1
+
+    else:
+        st.session_state["chatbot1_messages"] = [{"role": "assistant", "content": "How can I help you?"}]
+        
 for msg in st.session_state.chatbot1_messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
 if prompt := st.chat_input():
-    # if not openai_api_key:
-    #     st.info("Please add your OpenAI API key to continue.")
-    #     st.stop()
+    if not st.secrets.api.key: #openai_api_key:
+        st.info("Please add your OpenAI API key to continue.")
+        st.stop()
 
-    #client = OpenAI(api_key=openai_api_key)
+    APIclient = OpenAI(api_key=st.secrets.api.key)
     st.session_state.chatbot1_messages.append({"role": "user", "content": prompt})
+
     st.chat_message("user").write(prompt)
-    #response = client.chat.completions.create(model="gpt-3.5-turbo", chatbot1_messages=st.session_state.chatbot1_messages)
-    msg = "hello" #response.choices[0].message.content
+    response = APIclient.chat.completions.create(model="gpt-3.5-turbo", messages=st.session_state.chatbot1_messages)
+    msg = response.choices[0].message.content
     st.session_state.chatbot1_messages.append({"role": "assistant", "content": msg})
     st.chat_message("assistant").write(msg)
+    
+    print("kjeks her:", cookie_manager.get(cookie="userid"))
 
     update_chat_db()
 
