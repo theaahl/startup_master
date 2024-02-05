@@ -15,7 +15,7 @@ def local_css(file_name):
 
 local_css("./styles.css")
 add_indentation()
-hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
+hide_pages(["All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
 
 
 @st.cache_resource(experimental_allow_widgets=True)

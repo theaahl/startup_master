@@ -66,7 +66,7 @@ st.markdown("""
 
 ####### SIDEBAR #######
 add_indentation()
-hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
+hide_pages(["All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
 
 with st.sidebar:
     st.write("Your tasks")
@@ -120,8 +120,8 @@ header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
 #### MAIN CONTENT ####
 
 def write_data(mydict):
-    db = client.test_db #establish connection to the 'sample_guide' db
-    items = db.chat # return all result from the 'planets' collection
+    db = client.usertests #establish connection to the 'sample_guide' db
+    items = db.cycle_1 # return all result from the 'planets' collection
     items.insert_one(mydict)
 
 def get_user_feedback(feedback):
@@ -129,17 +129,17 @@ def get_user_feedback(feedback):
     return user_feedback
 
 def update_chat_db(feedback):
-    db = client.test_db 
+    db = client.usertests 
     user_feedback = get_user_feedback(feedback)
     
     print("feedback:", user_feedback)
     print("userid:", cookie_manager.get(cookie="userid"))
 
-    print(len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))))
+    print(len(list(db.cycle_1.find({"Task-1.id": cookie_manager.get(cookie="userid")}))))
 
-    if len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
+    if len(list(db.cycle_1.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
         print("opdaterte chatobjekt")
-        db.chat.update_one({"Task-1.id": cookie_manager.get(cookie="userid")}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Feedback": feedback}})
+        db.cycle_1.update_one({"Task-1.id": cookie_manager.get(cookie="userid")}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Feedback": feedback}})
     else:
         write_data(user_feedback)
         print("lagret ny chatobjekt")

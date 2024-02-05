@@ -33,7 +33,7 @@ client = init_connection()
 # Either this or add_indentation() MUST be called on each page in your
 # app to add indendation in the sidebar
 add_indentation()
-hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
+hide_pages(["All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
 #show_pages_from_config()
 
 with st.sidebar:
@@ -126,8 +126,8 @@ header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
 time.sleep(1)
 
 def write_data(mydict):
-    db = client.test_db #establish connection to the 'test_db' db
-    items = db.chat # return all result from the 'chats' collection
+    db = client.usertests #establish connection to the 'test_db' db
+    items = db.cycle_1 # return all result from the 'chats' collection
     items.insert_one(mydict)
 
 def get_chatlog():
@@ -144,30 +144,30 @@ def get_userchat(chatlog):
     return userchat
 
 def update_chat_db():
-    db = client.test_db 
+    db = client.usertests 
     chatlog = get_chatlog()
     
-    print(len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))))
+    print(len(list(db.cycle_1.find({"Task-1.id": cookie_manager.get(cookie="userid")}))))
 
-    if len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
+    if len(list(db.cycle_1.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
         print("opdaterte chatobjekt")
-        db.chat.update_one({"Task-1.id": cookie_manager.get(cookie="userid")}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-2": chatlog}})
+        db.cycle_1.update_one({"Task-1.id": cookie_manager.get(cookie="userid")}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-2": chatlog}})
     else:
         write_data(get_userchat(chatlog))
         print("lagret ny chatobjekt")
 
 
 if "chatbot2_messages" not in st.session_state:
-    db = client.test_db 
+    db = client.usertests 
 
     chatlog = []
 
-    if len(list(db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
-        chatlog = db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-2")
+    if len(list(db.cycle_1.find({"Task-1.id": cookie_manager.get(cookie="userid")}))) > 0:
+        chatlog = db.cycle_1.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-2")
 
     print(len(chatlog))
     if len(chatlog) > 0:
-        chatlog = db.chat.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-2")
+        chatlog = db.cycle_1.find({"Task-1.id": cookie_manager.get(cookie="userid")}).distinct("Task-1.Chatbot-2")
         msg_count = 0
         st.session_state["chatbot2_messages"] = []
         for msg in chatlog[0]:            
