@@ -5,7 +5,7 @@ icon = "🏠"
 
 [[pages]]
 path = "pages/2_All_Tasks.py"
-name = "All Tasks"
+name = "All_Tasks"
 icon = ":books:"
 
 [[pages]]

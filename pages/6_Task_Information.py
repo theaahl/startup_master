@@ -89,7 +89,7 @@ user_consent_cookie = cookie_manager.get(cookie="userid")
     
 ####### SIDEBAR #######
 add_indentation()
-hide_pages(["Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
+hide_pages(["All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
 
 
 with st.sidebar:
