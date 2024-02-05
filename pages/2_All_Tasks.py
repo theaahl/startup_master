@@ -29,7 +29,7 @@ with st.spinner('Loading page'):
     time.sleep(2)
 
 # Fetch a specific cookie
-user_consent_cookie = cookie_manager.get(cookie="kjeks")
+user_consent_cookie = cookie_manager.get(cookie="userid")
 print(user_consent_cookie, "hello")
 #### SIDEBAR ####
 with st.sidebar:

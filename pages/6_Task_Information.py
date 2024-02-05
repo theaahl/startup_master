@@ -63,7 +63,7 @@ cookie_manager = get_manager()
 cookie_manager.get_all()
 
 # Fetch a specific cookie
-user_consent_cookie = cookie_manager.get(cookie="kjeks")
+user_consent_cookie = cookie_manager.get(cookie="userid")
 
 
 
