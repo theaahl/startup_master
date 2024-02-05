@@ -15,18 +15,28 @@ def local_css(file_name):
 local_css("./styles.css")
 
 
-st.markdown("""
-            <style>
-                div[data-testid="column"] {
-                    width: fit-content !important;
-                    flex: unset;
-                }
-                div[data-testid="column"] * {
-                    width: fit-content !important;
-                }
-            </style>
-            """, unsafe_allow_html=True)
+@st.cache_resource(experimental_allow_widgets=True)
+def get_manager():
+    return stx.CookieManager()
 
+cookie_manager = get_manager()   
+
+@st.cache_resource
+def init_connection():
+    return MongoClient(st.secrets.mongo.uri, server_api=ServerApi('1'))
+
+client = init_connection()
+
+def init_cookies():
+  states = ["c1_option_1", "c1_txt_1", "c1_option_2", "c1_txt_2", "c2_option_1", "c2_txt_1", "c2_option_2", "c2_txt_2", "c3_option_1", "c3_txt_1", "c3_option_2", "c3_txt_2", "final"]
+
+  key_count = 1
+  for state in states:
+    if cookie_manager.get(state) is None:
+      cookie_manager.set(state, "", key=key_count)
+    key_count += 1
+
+init_cookies()
 
 ### Custom CSS for the sticky header
 st.markdown(
@@ -93,11 +103,6 @@ with st.sidebar:
             """
         st.markdown(feedback, unsafe_allow_html=True)
 
-@st.cache_resource(experimental_allow_widgets=True)
-def get_manager():
-    return stx.CookieManager()
-
-cookie_manager = get_manager()   
 
 header = st.container()
 header.header("Feedback")
@@ -113,22 +118,6 @@ with col2:
 header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
 
 #### MAIN CONTENT ####
-@st.cache_resource
-def init_connection():
-    return MongoClient(st.secrets.mongo.uri, server_api=ServerApi('1'))
-
-client = init_connection()
-
-def init_cookies():
-  states = ["c1_option_1", "c1_txt_1", "c1_option_2", "c1_txt_2", "c2_option_1", "c2_txt_1", "c2_option_2", "c2_txt_2", "c3_option_1", "c3_txt_1", "c3_option_2", "c3_txt_2", "final"]
-
-  key_count = 1
-  for state in states:
-    if cookie_manager.get(state) is None:
-      cookie_manager.set(state, "", key=key_count)
-    key_count += 1
-
-init_cookies()
 
 def write_data(mydict):
     db = client.test_db #establish connection to the 'sample_guide' db
