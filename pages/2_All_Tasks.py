@@ -29,7 +29,7 @@ with st.spinner('Loading page'):
     time.sleep(2)
 
 # Fetch a specific cookie
-user_consent_cookie = cookie_manager.get(cookie="kjeks")
+user_consent_cookie = cookie_manager.get(cookie="userid")
 print(user_consent_cookie, "hello")
 #### SIDEBAR ####
 with st.sidebar:
@@ -104,15 +104,15 @@ with st.sidebar:
 
 #### MAIN CONTENT ####
 
-st.title("All tasks")
+st.header("All tasks")
 st.write("Here is a list of all the tasks created for this study. To start the study go to one of the tasks")
 
-st.header("Task 1: Task name")
+st.subheader("Task 1: Task name")
 if st.button("Go to task", "t1"):
     switch_page("task information")
 st.write("Task description")
 
-st.header("Task 2: Task name")
+st.subheader("Task 2: Task name")
 if st.button("Go to task", "t2"):
     switch_page("task information")
 st.write("Task description")

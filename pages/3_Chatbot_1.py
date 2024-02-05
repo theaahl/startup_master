@@ -19,6 +19,18 @@ def local_css(file_name):
 
 local_css("./styles.css")
 
+@st.cache_resource(experimental_allow_widgets=True)
+def get_manager():
+    return stx.CookieManager()
+
+cookie_manager = get_manager()
+# cookie_manager.get_all()
+
+def init_connection():
+    return MongoClient(st.secrets.mongo.uri, server_api=ServerApi('1'))
+
+client = init_connection()
+
 # Custom CSS for back and forth buttons to fit content
 st.markdown("""
             <style>
@@ -46,19 +58,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-st.markdown("""
-            <style>
-                div[data-testid="column"] {
-                    width: fit-content !important;
-                    flex: unset;
-                }
-                div[data-testid="column"] * {
-                    width: fit-content !important;
-                }
-            </style>
-            """, unsafe_allow_html=True)
-
-
 
 ####### SIDEBAR #######
 add_indentation()
@@ -114,13 +113,6 @@ with col2:
 header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
 
 
-@st.cache_resource(experimental_allow_widgets=True)
-def get_manager():
-    return stx.CookieManager()
-
-cookie_manager = get_manager()
-cookie_manager.get_all()
-
 time.sleep(1)
 
 # #st.subheader("All Cookies:")
@@ -158,10 +150,7 @@ time.sleep(1)
 # print(cookie_manager.get(cookie="userid"))
 # print(st.session_state.user_id)
 
-def init_connection():
-    return MongoClient(st.secrets.mongo.uri, server_api=ServerApi('1'))
 
-client = init_connection()
 
 print("chatbot 1 cookie", cookie_manager.get(cookie="userid"))
 
