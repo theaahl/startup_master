@@ -123,7 +123,7 @@ with col2:
 
 header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
 
-time.sleep(1)
+time.sleep(2)
 
 def write_data(mydict):
     db = client.usertests #establish connection to the 'test_db' db

@@ -113,7 +113,7 @@ with col2:
 header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
 
 
-time.sleep(1)
+time.sleep(2)
 
 # #st.subheader("All Cookies:")
 # cookies = cookie_manager.get_all()
