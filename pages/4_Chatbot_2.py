@@ -7,6 +7,7 @@ from datetime import datetime
 from st_pages import add_indentation,hide_pages
 import extra_streamlit_components as stx
 import time
+import app_components as components 
 
 st.set_page_config(layout="wide") 
 
@@ -30,63 +31,10 @@ def init_connection():
 client = init_connection()
 
 ####### SIDEBAR #######
-# Either this or add_indentation() MUST be called on each page in your
-# app to add indendation in the sidebar
-add_indentation()
-hide_pages(["All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
-#show_pages_from_config()
+components.sidebar_nav(False)
 
-with st.sidebar:
-    st.write("Your tasks")
-    with st.expander("Task 1", expanded=True):
-        st.page_link("pages/6_Task_Information.py", label="Task information")
-        st.page_link("pages/3_Chatbot_1.py", label="Chatbot 1")
-        st.page_link("pages/4_Chatbot_2.py", label="Chatbot 2")
-        st.page_link("pages/5_Feedback.py", label="Feedback")
-
-
-
-### Custom CSS for the sticky header
-st.markdown(
-    """
-<style>
-    div[data-testid="stVerticalBlock"] div:has(div.fixed-header) {
-        position: sticky;
-        top: 2.875rem;
-        background-color: white;
-        z-index: 999;
-    }
-</style>
-    """,
-    unsafe_allow_html=True
-)
-st.markdown("""
-            <style>
-                div[data-testid="column"] {
-                    width: fit-content !important;
-                    flex: unset;
-                }
-                div[data-testid="column"] * {
-                    width: fit-content !important;
-                }
-            </style>
-            """, unsafe_allow_html=True)
-
-header = st.container()
-header.warning('Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information')
-#s = f"<p style='color:red;'>Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information.</p>"
-#header.markdown(s, unsafe_allow_html=True) 
-header.header("Chatbot 2")
-#st.markdown(title_style,unsafe_allow_html=True)
-col1, col2 = header.columns([1,1])
-with col1:
-    if st.button("Previous step: Chatbot 1", type="secondary"):
-        switch_page("chatbot 1")
-with col2:
-    if st.button("Next step: Feedback", type="primary"):
-        switch_page("feedback")
-
-header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
+### HEADER ###
+components.sticky_header("Chatbot 1", "Chatbot 2", "Feedback")
 
 with st.expander("View Task *(PS: Ask both chatbots the **same initial question**, then let the conversation flow naturally for each chatbot.)*"):
     st.write("In this user test, your task is to act as an early-stage tech startup that is in the process of developing an MVP for your business. Ask the chatbots about something you wonder about regarding MVP development. Test out **both** Chatbot 1 and Chatbot 2, then answer the questionnaire. Ask both chatbots the **same initial question**, then let the conversation flow naturally for each chatbot.")

@@ -5,6 +5,7 @@ from st_pages import add_indentation,hide_pages
 import extra_streamlit_components as stx
 from datetime import datetime
 from streamlit_extras.switch_page_button import switch_page
+import app_components as components 
 
 st.set_page_config(layout = "wide")
 
@@ -38,57 +39,11 @@ def init_cookies():
 
 init_cookies()
 
-### Custom CSS for the sticky header
-st.markdown(
-    """
-<style>
-    div[data-testid="stVerticalBlock"] div:has(div.fixed-header) {
-        position: sticky;
-        top: 2.875rem;
-        background-color: white;
-        z-index: 999;
-    }
-</style>
-    """,
-    unsafe_allow_html=True
-)
-st.markdown("""
-            <style>
-                div[data-testid="column"] {
-                    width: fit-content !important;
-                    flex: unset;
-                }
-                div[data-testid="column"] * {
-                    width: fit-content !important;
-                }
-            </style>
-            """, unsafe_allow_html=True)
-
 ####### SIDEBAR #######
-add_indentation()
-hide_pages(["All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
+components.sidebar_nav(False)
 
-with st.sidebar:
-    st.write("Your tasks")
-    with st.expander("Task 1", expanded=True):
-        st.page_link("pages/6_Task_Information.py", label="Task information")
-        st.page_link("pages/3_Chatbot_1.py", label="Chatbot 1")
-        st.page_link("pages/4_Chatbot_2.py", label="Chatbot 2")
-        st.page_link("pages/5_Feedback.py", label="Feedback")
-
-
-header = st.container()
-header.header("Feedback")
-
-col1, col2 = header.columns([1,1])
-with col1:
-    if st.button("Previous step: Chatbot 2", type="secondary"):
-        switch_page("chatbot 2")
-with col2:
-    if st.button("Next step: None", type="primary", disabled=True):
-        switch_page("feedback")
-
-header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
+### HEADER ###
+components.sticky_header("Chatbot 2", "Feedback", "None")
 
 #### MAIN CONTENT ####
 
