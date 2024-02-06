@@ -45,7 +45,7 @@ with main_container:
             
 
 ####### SIDEBAR #######
-components.sidebar_nav(userid_cookie == None)
+components.sidebar_nav(st.session_state["user_id"] == None)
 
 
 
