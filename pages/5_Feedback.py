@@ -206,11 +206,21 @@ cookie_manager.set("c1_txt_1", c1_txt_1, key="c1_txt_1")
 st.markdown("**Chatbot 2**")
 c1_option_2 = st.selectbox('​​To what degree did you feel the answers you received correspond with the **Correctness**-attribute for **Chatbot 2**',selectionbox_options,placeholder="Choose an option",index=get_selected_option("c1_option_2"))
 cookie_manager.set("c1_option_2", c1_option_2, key="c1_option_2")
+
 c1_txt_2 = st.text_area(
 "Comment on **Correctness** for **Chatbot 2**",
 value=cookie_manager.get("c1_txt_2"),placeholder="Comment"
 )
 cookie_manager.set("c1_txt_2", c1_txt_2, key="c1_txt_2")
+
+c1_prefer = st.selectbox(
+   "Which chatbot do you think gave the most correct answers?",
+   ("Chatbot 1", "Chatbot 2", "No difference"),
+   index=None,
+   placeholder="Select chatbot",
+)
+
+
 
 #Completeness
 st.subheader("Completeness")
@@ -239,6 +249,15 @@ c2_txt_2 = st.text_area(
 value=cookie_manager.get("c2_txt_2"),placeholder="Comment"
 )
 cookie_manager.set("c2_txt_2", c2_txt_2, key="c2_txt_2")
+
+c2_prefer = st.selectbox(
+   "Which chatbot do you think gave the most complete answers",
+   ("Chatbot 1", "Chatbot 2", "No difference"),
+   index=None,
+   placeholder="Select chatbot",
+)
+
+
 
 #Consinstency
 st.subheader("Consinstency")
@@ -269,6 +288,14 @@ value=cookie_manager.get("c3_txt_2"),placeholder="Comment"
 cookie_manager.set("c3_txt_2", c3_txt_2, key="c3_txt_2")
 
 
+c3_prefer = st.selectbox(
+   "Which chatbot do you think gave the most consistent answers",
+   ("Chatbot 1", "Chatbot 2", "No difference"),
+   index=None,
+   placeholder="Select chatbot",
+)
+
+
 #Usefulness
 st.subheader("Usefulness")
 with st.expander(":bulb:  Usefulness explenation"):
@@ -296,6 +323,14 @@ c4_txt_2 = st.text_area(
 value=cookie_manager.get("c4_txt_2"),placeholder="Comment"
 )
 cookie_manager.set("c4_txt_2", c4_txt_2, key="c4_txt_2")
+
+
+c4_prefer = st.selectbox(
+   "Which chatbot do you think gave the most useful answers",
+   ("Chatbot 1", "Chatbot 2", "No difference"),
+   index=None,
+   placeholder="Select chatbot",
+)
 
 
 #Final comments
