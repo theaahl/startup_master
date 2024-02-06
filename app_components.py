@@ -49,7 +49,8 @@ def sticky_header(prev_text, current_text, next_text):
         unsafe_allow_html=True
     )
     header = st.container()
-    header.warning('Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information')
+    if(current_text != "Feedback"):
+        header.warning('Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information')
     header.header(current_text)
     col1, col2 = header.columns([1,1])
     with col1:
