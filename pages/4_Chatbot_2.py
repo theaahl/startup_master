@@ -39,45 +39,10 @@ hide_pages(["All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information
 with st.sidebar:
     st.write("Your tasks")
     with st.expander("Task 1", expanded=True):
-        # new_test = """<a id="task information" href="#" target = "_self"><button class="not_clicked">Task information</button></a><a id="chatbot 1" href="#" target = "_self"><button class="not_clicked">Chatbot 1</button></a><a id="chatbot 2" href="#" target = "_self"><button class="clicked">Chatbot 2</button></a><a id="feedback" href="#" target = "_self"><button class="not_clicked">Feedback</button></a>"""
-        # #st.markdown(new_test, unsafe_allow_html=True)
-        # print(new_test)
-        # # st.markdown(new_test, unsafe_allow_html=True)
-        # clicked = click_detector(new_test)
-        # # print("clicked", clicked)
-        # if clicked != "":
-        #     switch_page(clicked)
-        task_info = f"""
-         <a href="Task_Information" target = "_self">
-         <button class="not_clicked">
-            Task information
-        </button></a>
-            """
-        st.markdown(task_info, unsafe_allow_html=True)
-
-        c1 = f"""
-        <a href="Chatbot_1" target = "_self">
-        <button class="not_clicked">
-            Chatbot 1
-        </button></a>
-            """
-        st.markdown(c1, unsafe_allow_html=True)
-
-        c2 = f"""
-        <a href="Chatbot_2" target = "_self">
-        <button class="clicked">
-            Chatbot 2
-        </button></a>
-            """
-        st.markdown(c2, unsafe_allow_html=True)
-
-        feedback = f"""
-        <a href="Feedback" target = "_self">
-        <button class="not_clicked">
-            Feedback
-        </button></a>
-            """
-        st.markdown(feedback, unsafe_allow_html=True)
+        st.page_link("pages/6_Task_Information.py", label="Task information")
+        st.page_link("pages/3_Chatbot_1.py", label="Chatbot 1")
+        st.page_link("pages/4_Chatbot_2.py", label="Chatbot 2")
+        st.page_link("pages/5_Feedback.py", label="Feedback")
 
 
 

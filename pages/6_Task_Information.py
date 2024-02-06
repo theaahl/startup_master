@@ -96,70 +96,10 @@ with st.sidebar:
     st.write("Your tasks")
     with st.expander("Task 1", expanded=True):
         if user_consent_cookie:
-            task_info = f"""
-            <a href="Task_Information" target = "_self">
-            <button class="clicked">
-                Task information
-            </button></a>
-                """
-            st.markdown(task_info, unsafe_allow_html=True)
-
-            c1 = f"""
-            <a href="Chatbot_1" target = "_self">
-            <button class="not_clicked">
-                Chatbot 1
-            </button></a>
-                """
-            st.markdown(c1, unsafe_allow_html=True)
-
-            c2 = f"""
-            <a href="Chatbot_2" target = "_self">
-            <button class="not_clicked">
-                Chatbot 2
-            </button></a>
-                """
-            st.markdown(c2, unsafe_allow_html=True)
-
-            feedback = f"""
-            <a href="Feedback" target = "_self">
-            <button class="not_clicked">
-                Feedback
-            </button></a>
-                """
-            st.markdown(feedback, unsafe_allow_html=True)
-
-        else:
-            task_info = f"""
-            <a href="Task_Information" target = "_self">
-            <button type="button" class="not_clicked">
-                Task information
-            </button></a>
-                """
-            st.markdown(task_info, unsafe_allow_html=True)
-
-            c1 = f"""
-            <a href="Chatbot_1" target = "_self">
-            <button type="button" class="disabeled" disabled>
-                Chatbot 1
-            </button></a>
-                """
-            st.markdown(c1, unsafe_allow_html=True)
-
-            c2 = f"""
-            <a href="Chatbot_2" target = "_self">
-            <button type="button" class="disabeled" disabled>
-                Chatbot 2
-            </button></a>
-                """
-            st.markdown(c2, unsafe_allow_html=True)
-
-            feedback = f"""
-            <a href="Feedback" target = "_self">
-            <button type="button" class="disabeled" disabled>
-                Feedback
-            </button></a>
-                """
-            st.markdown(feedback, unsafe_allow_html=True)
+            st.page_link("pages/6_Task_Information.py", label="Task information")
+            st.page_link("pages/3_Chatbot_1.py", label="Chatbot 1")
+            st.page_link("pages/4_Chatbot_2.py", label="Chatbot 2")
+            st.page_link("pages/5_Feedback.py", label="Feedback")
 
 header = st.container()
 header.info('Please read the task carefully to make sure you know how to communicate with ChatGPT in the next step')
