@@ -43,10 +43,10 @@ with st.sidebar:
             st.page_link("pages/5_Feedback.py", label="Feedback")
         
         else:
-            st.page_link("pages/6_Task_Information.py", label="Task information", disabled=True)
-            st.page_link("pages/3_Chatbot_1.py", label="Chatbot 1", disabled=True)
-            st.page_link("pages/4_Chatbot_2.py", label="Chatbot 2", disabled=True)
-            st.page_link("pages/5_Feedback.py", label="Feedback", disabled=True)
+            st.page_link("pages/6_Task_Information.py", label="Task information", disabled=True, help="Consent to unlock")
+            st.page_link("pages/3_Chatbot_1.py", label="Chatbot 1", disabled=True, help="Consent to unlock")
+            st.page_link("pages/4_Chatbot_2.py", label="Chatbot 2", disabled=True, help="Consent to unlock")
+            st.page_link("pages/5_Feedback.py", label="Feedback", disabled=True, help="Consent to unlock")
 
 
 
