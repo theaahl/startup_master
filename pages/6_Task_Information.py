@@ -14,15 +14,16 @@ def local_css(file_name):
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 local_css("./styles.css")
 
-@st.cache_resource(experimental_allow_widgets=True)
-def get_manager():
-    return stx.CookieManager()
+# @st.cache_resource(experimental_allow_widgets=True)
+# def get_manager():
+#     return stx.CookieManager()
 
-cookie_manager = get_manager()
-cookie_manager.get_all()
+
+# cookie_manager = get_manager()
+# cookie_manager.get_all()
 
 # Fetch a specific cookie
-user_consent_cookie = cookie_manager.get(cookie="userid")
+# user_consent_cookie = cookie_manager.get(cookie="userid")
 
 
 
