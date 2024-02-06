@@ -3,6 +3,7 @@ import streamlit as st
 from st_pages import add_indentation, hide_pages,show_pages_from_config
 import extra_streamlit_components as stx
 import uuid
+import app_components as components 
 
 st.set_page_config(layout="wide") 
 # show_pages_from_config()
@@ -44,20 +45,8 @@ with main_container:
             
 
 ####### SIDEBAR #######
-with st.sidebar:
-    st.write("Your tasks")
-    with st.expander("Task 1", expanded=True):
-        if st.session_state['user_id'] is not None: #userid_cookie:
-            st.page_link("pages/6_Task_Information.py", label="Task information")
-            st.page_link("pages/3_Chatbot_1.py", label="Chatbot 1")
-            st.page_link("pages/4_Chatbot_2.py", label="Chatbot 2")
-            st.page_link("pages/5_Feedback.py", label="Feedback")
-        
-        else:
-            st.page_link("pages/6_Task_Information.py", label="Task information", disabled=True, help="Consent to unlock")
-            st.page_link("pages/3_Chatbot_1.py", label="Chatbot 1", disabled=True, help="Consent to unlock")
-            st.page_link("pages/4_Chatbot_2.py", label="Chatbot 2", disabled=True, help="Consent to unlock")
-            st.page_link("pages/5_Feedback.py", label="Feedback", disabled=True, help="Consent to unlock")
+components.sidebar_nav(userid_cookie == None)
+
 
 
 
