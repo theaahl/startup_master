@@ -3,8 +3,7 @@ import streamlit as st
 from st_pages import add_indentation, hide_pages,show_pages_from_config
 import extra_streamlit_components as stx
 import uuid
-import time
-
+import app_components as components 
 
 st.set_page_config(layout="wide") 
 # show_pages_from_config()
@@ -17,102 +16,9 @@ local_css("./styles.css")
 add_indentation()
 hide_pages(["All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
 
+if 'user_id' not in st.session_state:
+    st.session_state['user_id'] = None
 
-@st.cache_resource(experimental_allow_widgets=True)
-def get_manager():
-    return stx.CookieManager()
-
-cookie_manager = get_manager()
-cookie_manager.get_all()
-with st.spinner('Loading page'):
-    time.sleep(2)
-
-# Fetch a specific cookie
-userid_cookie = cookie_manager.get(cookie="userid")
-
-
-
-####### SIDEBAR #######
-with st.sidebar:
-    st.write("Your tasks")
-    with st.expander("Task 1", expanded=True):
-        if userid_cookie:
-            task_info = f"""
-            <a href="Task_Information" target = "_self">
-            <button class="not_clicked">
-                Task information
-            </button></a>
-                """
-            st.markdown(task_info, unsafe_allow_html=True)
-
-            c1 = f"""
-            <a href="Chatbot_1" target = "_self">
-            <button class="not_clicked">
-                Chatbot 1
-            </button></a>
-                """
-            st.markdown(c1, unsafe_allow_html=True)
-
-            c2 = f"""
-            <a href="Chatbot_2" target = "_self">
-            <button class="not_clicked">
-                Chatbot 2
-            </button></a>
-                """
-            st.markdown(c2, unsafe_allow_html=True)
-
-            feedback = f"""
-            <a href="Feedback" target = "_self">
-            <button class="not_clicked">
-                Feedback
-            </button></a>
-                """
-            st.markdown(feedback, unsafe_allow_html=True)
-
-        else:
-            task_info = f"""
-            <a href="Task_Information" target = "_self">
-            <button type="button" class="not_clicked">
-                Task information
-            </button></a>
-                """
-            st.markdown(task_info, unsafe_allow_html=True)
-
-            c1 = f"""
-            <a href="Chatbot_1" target = "_self">
-            <button type="button" class="disabeled" disabled>
-                Chatbot 1
-            </button></a>
-                """
-            st.markdown(c1, unsafe_allow_html=True)
-
-            c2 = f"""
-            <a href="Chatbot_2" target = "_self">
-            <button type="button" class="disabeled" disabled>
-                Chatbot 2
-            </button></a>
-                """
-            st.markdown(c2, unsafe_allow_html=True)
-
-            feedback = f"""
-            <a href="Feedback" target = "_self">
-            <button type="button" class="disabeled" disabled>
-                Feedback
-            </button></a>
-                """
-            st.markdown(feedback, unsafe_allow_html=True)
-
-
-
-#### MAIN PAGE ####
-st.title("StartupGPT")
-
-c = st.container()
-script = """<div id = 'chat_outer'></div>"""
-st.markdown(script, unsafe_allow_html=True)
-
-# Fetch a specific cookie
-# user_consent_cookie = cookie_manager.get(cookie="kjeks")
 
 # Create a main container
 main_container = st.container()
@@ -125,7 +31,7 @@ with main_container:
     # Create a sub-container for the button
     button_container = st.empty()
 
-    if userid_cookie:
+    if st.session_state['user_id'] is not None:
         # User has already given consent
         button_container.button('Thank you for your consent', disabled=True)
     else:
@@ -133,11 +39,23 @@ with main_container:
         consent_button = button_container.button('Click to consent to continue')
 
         if consent_button:
-            # Set the consent cookie when the button is clicked
-            cookie_manager.set("userid", str(uuid.uuid4()))
+            st.session_state['user_id'] = str(uuid.uuid4())
+            button_container.button('Thank you for your consent', disabled=True)
+
             
 
+####### SIDEBAR #######
+components.sidebar_nav(st.session_state["user_id"] == None)
 
+
+
+
+#### MAIN PAGE ####
+st.title("StartupGPT")
+
+c = st.container()
+script = """<div id = 'chat_outer'></div>"""
+st.markdown(script, unsafe_allow_html=True)
 
 st.header("Information about the project")
 st.write("This website serves as a prototype developed as part of a master thesis in Computer Science at the Norwegian University of Science and Technology (NTNU). The core objective of this project is to harness the potential of ChatGPT in empowering startups. While ChatGPT is becoming a widely used tool for businesses, tailoring it to fit the needs of different sectors can make it significantly more valuable for that particular sector. For startups this can be especially valuable due to high failure rates and lack of support. The use of AI tools such as ChatGPT as a virtual assistant can thereby help entrepreneurs save time, reduce costs, and improve productivity.")
@@ -174,5 +92,7 @@ style = """<style>
 div[data-testid='stVerticalBlock']:has(div#chat_inner):not(:has(div#chat_outer)) {background-color: #E4F2EC; border-radius:10px; padding:16px;};
 </style>
 """
+
+print("user id:", st.session_state['user_id'])
 
 st.markdown(style, unsafe_allow_html=True)
