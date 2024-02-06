@@ -48,6 +48,7 @@ user_consent_cookie = cookie_manager.get(cookie="userid")
     
 ####### SIDEBAR #######
 components.sidebar_nav(False)
+### HEADER ###
 components.sticky_header("None", "Task Information", "Chatbot 1")
 
 st.subheader("Task")
