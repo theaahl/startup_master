@@ -13,39 +13,6 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 local_css("./styles.css")
-
-# @st.cache_resource(experimental_allow_widgets=True)
-# def get_manager():
-#     return stx.CookieManager()
-
-
-# cookie_manager = get_manager()
-# cookie_manager.get_all()
-
-# Fetch a specific cookie
-# user_consent_cookie = cookie_manager.get(cookie="userid")
-
-
-
-
-# cookie_manager = get_manager()
-# start_time = time.time()
-# timeout = 0.01  # Preset timeout time
-# while True:
-#     if 'cookies' not in st.session_state:
-#         st.session_state['cookies'] = cookie_manager.get_all()
-#         time.sleep(2)
-#     #elif time.time() - start_time > timeout:
-#      #   st.warning("Operation timeout. Please refresh the page or check your network connection.")
-#       #  break  # If timed out, exit the loop directly
-#     else:
-#         if 'lzs_userid' not in st.session_state.cookies:
-#             if 'lzs_userid' not in st.session_state:
-#                 st.session_state["lzs_userid"] = str(uuid.uuid4())
-#             cookie_manager.set('lzs_userid', st.session_state["lzs_userid"], key="0", expires_at=datetime.datetime(year=2023, month=8, day=2))
-#             print("hei", st.session_state["lzs_userid"])
-#         break
-
     
 ####### SIDEBAR #######
 components.sidebar_nav(False)
