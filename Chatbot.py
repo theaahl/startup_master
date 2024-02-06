@@ -3,8 +3,6 @@ import streamlit as st
 from st_pages import add_indentation, hide_pages,show_pages_from_config
 import extra_streamlit_components as stx
 import uuid
-import time
-
 
 st.set_page_config(layout="wide") 
 # show_pages_from_config()
@@ -17,26 +15,39 @@ local_css("./styles.css")
 add_indentation()
 hide_pages(["All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
 
-
-@st.cache_resource(experimental_allow_widgets=True)
-def get_manager():
-    return stx.CookieManager()
-
-cookie_manager = get_manager()
-cookie_manager.get_all()
-with st.spinner('Loading page'):
-    time.sleep(2)
-
-# Fetch a specific cookie
-userid_cookie = cookie_manager.get(cookie="userid")
+if 'user_id' not in st.session_state:
+    st.session_state['user_id'] = None
 
 
+# Create a main container
+main_container = st.container()
+
+with main_container:
+    script = """<div id = 'chat_inner'></div>"""
+    st.markdown(script, unsafe_allow_html=True)
+    st.write("***Please read the information below before consenting.***")
+    st.write("I consent to the collection and processing of chatlogs and feedback-data as described below for the purposes of this research study.")
+    # Create a sub-container for the button
+    button_container = st.empty()
+
+    if st.session_state['user_id'] is not None:
+        # User has already given consent
+        button_container.button('Thank you for your consent', disabled=True)
+    else:
+        # User has not given consent yet
+        consent_button = button_container.button('Click to consent to continue')
+
+        if consent_button:
+            st.session_state['user_id'] = str(uuid.uuid4())
+            button_container.button('Thank you for your consent', disabled=True)
+
+            
 
 ####### SIDEBAR #######
 with st.sidebar:
     st.write("Your tasks")
     with st.expander("Task 1", expanded=True):
-        if userid_cookie:
+        if st.session_state['user_id'] is not None: #userid_cookie:
             st.page_link("pages/6_Task_Information.py", label="Task information")
             st.page_link("pages/3_Chatbot_1.py", label="Chatbot 1")
             st.page_link("pages/4_Chatbot_2.py", label="Chatbot 2")
@@ -56,34 +67,6 @@ st.title("StartupGPT")
 c = st.container()
 script = """<div id = 'chat_outer'></div>"""
 st.markdown(script, unsafe_allow_html=True)
-
-# Fetch a specific cookie
-# user_consent_cookie = cookie_manager.get(cookie="kjeks")
-
-# Create a main container
-main_container = st.container()
-
-with main_container:
-    script = """<div id = 'chat_inner'></div>"""
-    st.markdown(script, unsafe_allow_html=True)
-    st.write("***Please read the information below before consenting.***")
-    st.write("I consent to the collection and processing of chatlogs and feedback-data as described below for the purposes of this research study.")
-    # Create a sub-container for the button
-    button_container = st.empty()
-
-    if userid_cookie:
-        # User has already given consent
-        button_container.button('Thank you for your consent', disabled=True)
-    else:
-        # User has not given consent yet
-        consent_button = button_container.button('Click to consent to continue')
-
-        if consent_button:
-            # Set the consent cookie when the button is clicked
-            cookie_manager.set("userid", str(uuid.uuid4()))
-            
-
-
 
 st.header("Information about the project")
 st.write("This website serves as a prototype developed as part of a master thesis in Computer Science at the Norwegian University of Science and Technology (NTNU). The core objective of this project is to harness the potential of ChatGPT in empowering startups. While ChatGPT is becoming a widely used tool for businesses, tailoring it to fit the needs of different sectors can make it significantly more valuable for that particular sector. For startups this can be especially valuable due to high failure rates and lack of support. The use of AI tools such as ChatGPT as a virtual assistant can thereby help entrepreneurs save time, reduce costs, and improve productivity.")
@@ -120,5 +103,7 @@ style = """<style>
 div[data-testid='stVerticalBlock']:has(div#chat_inner):not(:has(div#chat_outer)) {background-color: #E4F2EC; border-radius:10px; padding:16px;};
 </style>
 """
+
+print("user id:", st.session_state['user_id'])
 
 st.markdown(style, unsafe_allow_html=True)

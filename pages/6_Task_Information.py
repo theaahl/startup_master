@@ -55,15 +55,15 @@ st.markdown("""
             """, unsafe_allow_html=True)
 
 
-@st.cache_resource(experimental_allow_widgets=True)
-def get_manager():
-    return stx.CookieManager()
+# @st.cache_resource(experimental_allow_widgets=True)
+# def get_manager():
+#     return stx.CookieManager()
 
-cookie_manager = get_manager()
-cookie_manager.get_all()
+# cookie_manager = get_manager()
+# cookie_manager.get_all()
 
 # Fetch a specific cookie
-user_consent_cookie = cookie_manager.get(cookie="userid")
+# user_consent_cookie = cookie_manager.get(cookie="userid")
 
 
 
