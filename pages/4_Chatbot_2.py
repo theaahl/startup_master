@@ -88,6 +88,9 @@ with col2:
 
 header.write("""<div class='fixed-header'/>""", unsafe_allow_html=True)
 
+with st.expander("View Task *(PS: Ask both chatbots the **same initial question**, then let the conversation flow naturally for each chatbot.)*"):
+    st.write("In this user test, your task is to act as an early-stage tech startup that is in the process of developing an MVP for your business. Ask the chatbots about something you wonder about regarding MVP development. Test out **both** Chatbot 1 and Chatbot 2, then answer the questionnaire. Ask both chatbots the **same initial question**, then let the conversation flow naturally for each chatbot.")
+
 time.sleep(1)
 
 def write_data(mydict):
