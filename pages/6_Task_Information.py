@@ -95,11 +95,10 @@ hide_pages(["All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information
 with st.sidebar:
     st.write("Your tasks")
     with st.expander("Task 1", expanded=True):
-        if user_consent_cookie:
-            st.page_link("pages/6_Task_Information.py", label="Task information")
-            st.page_link("pages/3_Chatbot_1.py", label="Chatbot 1")
-            st.page_link("pages/4_Chatbot_2.py", label="Chatbot 2")
-            st.page_link("pages/5_Feedback.py", label="Feedback")
+        st.page_link("pages/6_Task_Information.py", label="Task information")
+        st.page_link("pages/3_Chatbot_1.py", label="Chatbot 1")
+        st.page_link("pages/4_Chatbot_2.py", label="Chatbot 2")
+        st.page_link("pages/5_Feedback.py", label="Feedback")
 
 header = st.container()
 header.info('Please read the task carefully to make sure you know how to communicate with ChatGPT in the next step')
