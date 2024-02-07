@@ -114,7 +114,7 @@ st.markdown('<a href="mailto:helenfs@stud.ntnu.no">helenfs@stud.ntnu.no</a>', un
 
 ## applying style
 style = """<style>
-div[data-testid='stVerticalBlock']:has(div#chat_inner):not(:has(div#chat_outer)) {background-color: #E4F2EC; border-radius:10px; padding:16px;};
+div[data-testid='stVerticalBlock']:has(div#chat_inner):not(:has(div#chat_outer)) {background-color: rgba(51, 122, 118, 0.2); border-radius:10px; padding:16px;};
 </style>
 """
 
