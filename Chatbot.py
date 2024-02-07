@@ -4,6 +4,8 @@ from st_pages import hide_pages
 import extra_streamlit_components as stx
 import uuid
 import app_components as components 
+from pymongo import MongoClient
+from pymongo.server_api import ServerApi
 
 st.set_page_config(layout="wide", page_title="StartupGPT") 
 
@@ -19,6 +21,13 @@ local_css("./styles.css")
 if 'user_id' not in st.session_state:
     st.session_state['user_id'] = None
 
+print(st.session_state['user_id'])
+
+@st.cache_resource
+def init_connection():
+    return MongoClient(st.secrets.mongo.uri, server_api=ServerApi('1'))
+
+client = init_connection()
 
 # Create a main container
 main_container = st.container()
@@ -42,13 +51,6 @@ with main_container:
             st.session_state['user_id'] = str(uuid.uuid4())
             button_container.button('Thank you for your consent, you can now click on tasks in the sidebar', disabled=True)
 
-            
-
-####### SIDEBAR #######
-components.sidebar_nav(st.session_state["user_id"] == None)
-
-
-
 
 #### MAIN PAGE ####
 st.title("StartupGPT")
@@ -64,8 +66,31 @@ st.write("The anticipated outcome of this research is a more effective use of AI
 
 st.header("Voluntary Participation")
 st.write("Your participation in this study is entirely voluntary. You have the right to withdraw at any time without any negative consequences. If you wish to withdraw all the data obtained concerning you for this study is deleted immediately. You will not be able to recover your data after withdrawing. To withdraw from the study click the button below:")
-if st.button("Click to withdraw from study"): ## Ad functionality to delete user data
-    print("witdrawn") ## Add modal when feature is released
+withdraw_button_container = st.empty()
+if st.session_state['user_id'] is None:
+    withdraw_button_container.button("Click to withdraw from study", type="primary", disabled=True)
+else:
+    #withdraw_button = withdraw_button_container.button("Click to withdraw from study", disabled=False) ## Ad functionality to delete user data
+    
+    if withdraw_button_container.button("Click to withdraw from study", type="primary", disabled=False):
+        
+        print("witdrawn") ## Add modal when feature is released
+        db = client.usertests
+
+        if len(list(db.cycle_1.find({"Task-1.id": st.session_state['user_id']}))) > 0:
+            db.cycle_1.delete_one({"Task-1.id": st.session_state['user_id']})
+
+        for key in st.session_state.keys():
+            del st.session_state[key]
+
+        st.session_state['user_id'] = None     
+        withdraw_button = withdraw_button_container.button("You have successfully withdrawn from the study. Click Consent to participate", type="primary", disabled=True)   
+        consent_button = button_container.button('Click to consent to continue')
+
+####### SIDEBAR #######
+#components.sidebar_nav(st.session_state["user_id"] == None)
+components.sidebar_nav(st.session_state['user_id'] is None)
+
 st.header("Confidentiality and Data Protection")
 lst = ['All personal data collected during this study will be treated confidentially and will only be used for research purposes.', 'We will implement appropriate technical and organizational measures to ensure the security of your data.', 'Data will be anonymized', 'The data will be stored securely in a secure database and will only be accessible to the research team.', 'Your data will be retained for the duration of this master study and will be destroyed securely after this period.']
 s = ''
@@ -92,7 +117,5 @@ style = """<style>
 div[data-testid='stVerticalBlock']:has(div#chat_inner):not(:has(div#chat_outer)) {background-color: #E4F2EC; border-radius:10px; padding:16px;};
 </style>
 """
-
-print("user id:", st.session_state['user_id'])
 
 st.markdown(style, unsafe_allow_html=True)
