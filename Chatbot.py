@@ -40,7 +40,7 @@ with main_container:
 
         if consent_button:
             st.session_state['user_id'] = str(uuid.uuid4())
-            button_container.button('Thank you for your consent', disabled=True)
+            button_container.button('Thank you for your consent, you can now click on tasks in the sidebar', disabled=True)
 
             
 
@@ -67,7 +67,7 @@ st.write("Your participation in this study is entirely voluntary. You have the r
 if st.button("Click to withdraw from study"): ## Ad functionality to delete user data
     print("witdrawn") ## Add modal when feature is released
 st.header("Confidentiality and Data Protection")
-lst = ['All personal data collected during this study will be treated confidentially and will only be used for research purposes.', 'We will implement appropriate technical and organizational measures to ensure the security of your data.', 'Data will be anonymized/pseudonymized', 'The data will be stored securely in a secure database and will only be accessible to the research team.', 'Your data will be retained for the duration of this master study and will be destroyed securely after this period.']
+lst = ['All personal data collected during this study will be treated confidentially and will only be used for research purposes.', 'We will implement appropriate technical and organizational measures to ensure the security of your data.', 'Data will be anonymized', 'The data will be stored securely in a secure database and will only be accessible to the research team.', 'Your data will be retained for the duration of this master study and will be destroyed securely after this period.']
 s = ''
 for i in lst:
     s += "- " + i + "\n"

@@ -52,7 +52,10 @@ def sticky_header(prev_text, current_text, next_text):
     )
     header = st.container()
     if(current_text != "Feedback"):
-        header.warning('Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information')
+        if(current_text == "Task Information"):
+            header.info('Please read the task carefully to make sure you know how to communicate with ChatGPT in the next step')
+        else:
+            header.warning('Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information')
     header.header(current_text)
     col1, col2 = header.columns([1,1])
     with col1:

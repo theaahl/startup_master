@@ -34,6 +34,7 @@ components.sticky_header("Task Information", "Chatbot 1", "Chatbot 2")
 
 if('user_id' not in st.session_state):
     st.write("You need to consent in the \"Home\" page to get access")
+    switch_page("Chatbot")
 else:
     with st.expander("View Task *(PS: Ask both chatbots the **same initial question**, then let the conversation flow naturally for each chatbot.)*"):
         st.write("In this user test, your task is to act as an early-stage tech startup that is in the process of developing an MVP for your business. Ask the chatbots about something you wonder about regarding MVP development. Test out **both** Chatbot 1 and Chatbot 2, then answer the questionnaire. Ask both chatbots the **same initial question**, then let the conversation flow naturally for each chatbot.")

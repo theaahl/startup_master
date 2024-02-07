@@ -41,6 +41,7 @@ components.sticky_header("Chatbot 2", "Feedback", "None")
 #### MAIN CONTENT ####
 if('user_id' not in st.session_state):
     st.write("You need to consent in the \"Home\" page to get access")
+    switch_page("Chatbot")
 else:
   def write_data(mydict):
       db = client.usertests #establish connection to the 'sample_guide' db
