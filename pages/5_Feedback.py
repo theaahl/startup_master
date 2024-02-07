@@ -7,7 +7,7 @@ from datetime import datetime
 from streamlit_extras.switch_page_button import switch_page
 import app_components as components 
 
-st.set_page_config(layout = "wide")
+st.set_page_config(layout = "wide", page_title="StartupGPT")
 
 def local_css(file_name):
     with open(file_name) as f:
@@ -37,7 +37,10 @@ components.sidebar_nav(False)
 components.sticky_header("Chatbot 2", "Feedback", "None")
 
 #### MAIN CONTENT ####
-
+if('user_id' not in st.session_state):
+    st.write("You need to consent in the \"Home\" page to get access")
+    switch_page("Chatbot")
+    
 def write_data(mydict):
     db = client.usertests #establish connection to the 'sample_guide' db
     items = db.cycle_1 # return all result from the 'planets' collection
@@ -50,7 +53,7 @@ def get_user_feedback(feedback):
 def update_chat_db(feedback):
     db = client.usertests 
     user_feedback = get_user_feedback(feedback)
-    
+
     print("feedback:", user_feedback)
     print("userid:", st.session_state['user_id'])
 
@@ -73,57 +76,58 @@ def gather_feedback():
       "chatbot_2":{
         "option":st.session_state['c1_option_2'],
         "comment":st.session_state['c1_txt_2']
-      },
-      "perferred_chatbot": st.session_state['c1_perfer']
+      }
     },
+    "perferred_chatbot": st.session_state['c1_perfer']
+  },
 
-    "complete":{
-      "chatbot_1":{
-        "option":st.session_state['c2_option_1'],
-        "comment":st.session_state['c2_txt_1']
-      },
-      "chatbot_2":{
-        "option":st.session_state['c2_option_2'],
-        "comment":st.session_state['c2_txt_2']
-      },
-      "perferred_chatbot": st.session_state['c2_perfer']
+  "complete":{
+    "chatbot_1":{
+      "option":st.session_state['c2_option_1'],
+      "comment":st.session_state['c2_txt_1']
     },
-
-    "consistent":{
-      "chatbot_1":{
-        "option":st.session_state['c3_option_1'],
-        "comment":st.session_state['c3_txt_1']
-      },
-      "chatbot_2":{
-        "option":st.session_state['c3_option_2'],
-        "comment":st.session_state['c3_txt_2']
-      },
-      "perferred_chatbot": st.session_state['c3_perfer']
+    "chatbot_2":{
+      "option":st.session_state['c2_option_2'],
+      "comment":st.session_state['c2_txt_2']
     },
+    "perferred_chatbot": st.session_state['c2_perfer']
+  },
 
-    "usefull":{
-      "chatbot_1":{
-        "option":st.session_state['c4_option_1'],
-        "comment":st.session_state['c4_txt_1']
-      },
-      "chatbot_2":{
-        "option":st.session_state['c4_option_2'],
-        "comment":st.session_state['c4_txt_2']
-      },
-      "perferred_chatbot": st.session_state['c4_perfer']
+  "consistent":{
+    "chatbot_1":{
+      "option":st.session_state['c3_option_1'],
+      "comment":st.session_state['c3_txt_1']
     },
+    "chatbot_2":{
+      "option":st.session_state['c3_option_2'],
+      "comment":st.session_state['c3_txt_2']
+    },
+    "perferred_chatbot": st.session_state['c3_perfer']
+  },
 
-    "final_comment":st.session_state['final']
-  }
+  "usefull":{
+    "chatbot_1":{
+      "option":st.session_state['c4_option_1'],
+      "comment":st.session_state['c4_txt_1']
+    },
+    "chatbot_2":{
+      "option":st.session_state['c4_option_2'],
+      "comment":st.session_state['c4_txt_2']
+    },
+    "perferred_chatbot": st.session_state['c4_perfer']
+  },
+
+  "final_comment":st.session_state['final']
+}
 
 if "disabled" not in st.session_state:
     st.session_state["disabled"] = False
 
 def disable():
     st.session_state["disabled"] = True
-    
+
 #------------- Form ------------------------   
-    
+
 st.caption("Please rate your experience with the chat based on the following criteria:")
 
 selectionbox_options = ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"]
@@ -305,6 +309,7 @@ if submitted:
   all_feedback = gather_feedback()
   update_chat_db(all_feedback)
   st.info("Thank you for giving us your feedback!")
+
    
 
    

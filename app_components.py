@@ -3,8 +3,10 @@ from streamlit_extras.switch_page_button import switch_page
 from st_pages import hide_pages
 
 def sidebar_nav(disabeled):
-    hide_pages(["All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
+    hide_pages(["Chatbot", "All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
+
     with st.sidebar:
+        st.page_link("Chatbot.py", label="Home")
         st.write("Your tasks")
         with st.expander("Task 1", expanded=True):
             if(disabeled):
@@ -49,7 +51,11 @@ def sticky_header(prev_text, current_text, next_text):
         unsafe_allow_html=True
     )
     header = st.container()
-    header.warning('Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information')
+    if(current_text != "Feedback"):
+        if(current_text == "Task Information"):
+            header.info('Please read the task carefully to make sure you know how to communicate with ChatGPT in the next step')
+        else:
+            header.warning('Please note that the conversations will be saved and used in our master thesis. Do not include personal or sensitive information')
     header.header(current_text)
     col1, col2 = header.columns([1,1])
     with col1:

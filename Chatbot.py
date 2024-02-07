@@ -1,20 +1,20 @@
 from openai import OpenAI
 import streamlit as st
-from st_pages import add_indentation, hide_pages,show_pages_from_config
+from st_pages import hide_pages
 import extra_streamlit_components as stx
 import uuid
 import app_components as components 
 
-st.set_page_config(layout="wide") 
-# show_pages_from_config()
+st.set_page_config(layout="wide", page_title="StartupGPT") 
+
 
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 local_css("./styles.css")
-add_indentation()
-hide_pages(["All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
+
+# hide_pages([ "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
 
 if 'user_id' not in st.session_state:
     st.session_state['user_id'] = None
@@ -40,7 +40,7 @@ with main_container:
 
         if consent_button:
             st.session_state['user_id'] = str(uuid.uuid4())
-            button_container.button('Thank you for your consent', disabled=True)
+            button_container.button('Thank you for your consent, you can now click on tasks in the sidebar', disabled=True)
 
             
 
@@ -67,7 +67,7 @@ st.write("Your participation in this study is entirely voluntary. You have the r
 if st.button("Click to withdraw from study"): ## Ad functionality to delete user data
     print("witdrawn") ## Add modal when feature is released
 st.header("Confidentiality and Data Protection")
-lst = ['All personal data collected during this study will be treated confidentially and will only be used for research purposes.', 'We will implement appropriate technical and organizational measures to ensure the security of your data.', 'Data will be anonymized/pseudonymized', 'The data will be stored securely in a secure database and will only be accessible to the research team.', 'Your data will be retained for the duration of this master study and will be destroyed securely after this period.']
+lst = ['All personal data collected during this study will be treated confidentially and will only be used for research purposes.', 'We will implement appropriate technical and organizational measures to ensure the security of your data.', 'Data will be anonymized', 'The data will be stored securely in a secure database and will only be accessible to the research team.', 'Your data will be retained for the duration of this master study and will be destroyed securely after this period.']
 s = ''
 for i in lst:
     s += "- " + i + "\n"
