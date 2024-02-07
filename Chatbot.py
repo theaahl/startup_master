@@ -1,20 +1,20 @@
 from openai import OpenAI
 import streamlit as st
-from st_pages import add_indentation, hide_pages,show_pages_from_config
+from st_pages import hide_pages
 import extra_streamlit_components as stx
 import uuid
 import app_components as components 
 
-st.set_page_config(layout="wide") 
-# show_pages_from_config()
+st.set_page_config(layout="wide", page_title="StartupGPT") 
+
 
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 local_css("./styles.css")
-add_indentation()
-hide_pages(["All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
+
+# hide_pages([ "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
 
 if 'user_id' not in st.session_state:
     st.session_state['user_id'] = None

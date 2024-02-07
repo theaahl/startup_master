@@ -3,8 +3,10 @@ from streamlit_extras.switch_page_button import switch_page
 from st_pages import hide_pages
 
 def sidebar_nav(disabeled):
-    hide_pages(["All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
+    hide_pages(["Chatbot", "All_Tasks", "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
+
     with st.sidebar:
+        st.page_link("Chatbot.py", label="Home")
         st.write("Your tasks")
         with st.expander("Task 1", expanded=True):
             if(disabeled):
