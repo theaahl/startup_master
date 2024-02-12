@@ -41,8 +41,11 @@ else:
 
     def write_data(mydict):
         db = client.usertests #establish connection to the 'test_db' db
+        backup_db = client.usertests_backup
         items = db.cycle_1 # return all result from the 'test_chats' collection
+        items_backup = backup_db.cycle_1
         items.insert_one(mydict)
+        items_backup.insert_one(mydict)
 
     def get_chatlog():
         log = {}
@@ -60,12 +63,15 @@ else:
     def update_chat_db():
         db = client.usertests 
         chatlog = get_chatlog()
+        backup_db = client.usertests_backup
         
         print(len(list(db.cycle_1.find({"Task-1.id": st.session_state['user_id']}))))
 
         if len(list(db.cycle_1.find({"Task-1.id": st.session_state['user_id']}))) > 0:
             print("opdaterte chatobjekt")
             db.cycle_1.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-1": chatlog}})
+            backup_db.cycle_1.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-1": chatlog}})
+
         else:
             write_data(get_userchat(chatlog))
             print("lagret ny chatobjekt")

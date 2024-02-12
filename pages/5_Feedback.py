@@ -34,7 +34,7 @@ init_cookies()
 components.sidebar_nav(False)
 
 ### HEADER ###
-components.sticky_header("Chatbot 2", "Feedback", "None")
+components.sticky_header("Chatbot 3", "Feedback", "None")
 
 #### MAIN CONTENT ####
 if('user_id' not in st.session_state):
@@ -42,9 +42,12 @@ if('user_id' not in st.session_state):
     switch_page("Chatbot")
     
 def write_data(mydict):
-    db = client.usertests #establish connection to the 'sample_guide' db
-    items = db.cycle_1 # return all result from the 'planets' collection
+    db = client.usertests #establish connection to the 'test_db' db
+    backup_db = client.usertests_backup
+    items = db.cycle_1 # return all result from the 'test_chats' collection
+    items_backup = backup_db.cycle_1
     items.insert_one(mydict)
+    items_backup.insert_one(mydict)
 
 def get_user_feedback(feedback):
     user_feedback = {"Task-1":{"id": st.session_state['user_id'], "time": datetime.now(), "Feedback": feedback}}
@@ -53,6 +56,7 @@ def get_user_feedback(feedback):
 def update_chat_db(feedback):
     db = client.usertests 
     user_feedback = get_user_feedback(feedback)
+    backup_db = client.usertests_backup
 
     print("feedback:", user_feedback)
     print("userid:", st.session_state['user_id'])
@@ -62,6 +66,8 @@ def update_chat_db(feedback):
     if len(list(db.cycle_1.find({"Task-1.id": st.session_state['user_id']}))) > 0:
         print("opdaterte chatobjekt")
         db.cycle_1.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Feedback": feedback}})
+        backup_db.cycle_1.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Feedback": feedback}})
+
     else:
         write_data(user_feedback)
         print("lagret ny chatobjekt")
@@ -76,49 +82,48 @@ def gather_feedback():
       "chatbot_2":{
         "option":st.session_state['c1_option_2'],
         "comment":st.session_state['c1_txt_2']
-      }
-    },
+      },
     "perferred_chatbot": st.session_state['c1_perfer']
-  },
+    },
 
-  "complete":{
-    "chatbot_1":{
-      "option":st.session_state['c2_option_1'],
-      "comment":st.session_state['c2_txt_1']
+    "complete":{
+      "chatbot_1":{
+        "option":st.session_state['c2_option_1'],
+        "comment":st.session_state['c2_txt_1']
+      },
+      "chatbot_2":{
+        "option":st.session_state['c2_option_2'],
+        "comment":st.session_state['c2_txt_2']
+      },
+      "perferred_chatbot": st.session_state['c2_perfer']
     },
-    "chatbot_2":{
-      "option":st.session_state['c2_option_2'],
-      "comment":st.session_state['c2_txt_2']
-    },
-    "perferred_chatbot": st.session_state['c2_perfer']
-  },
 
-  "consistent":{
-    "chatbot_1":{
-      "option":st.session_state['c3_option_1'],
-      "comment":st.session_state['c3_txt_1']
+    "consistent":{
+      "chatbot_1":{
+        "option":st.session_state['c3_option_1'],
+        "comment":st.session_state['c3_txt_1']
+      },
+      "chatbot_2":{
+        "option":st.session_state['c3_option_2'],
+        "comment":st.session_state['c3_txt_2']
+      },
+      "perferred_chatbot": st.session_state['c3_perfer']
     },
-    "chatbot_2":{
-      "option":st.session_state['c3_option_2'],
-      "comment":st.session_state['c3_txt_2']
-    },
-    "perferred_chatbot": st.session_state['c3_perfer']
-  },
 
-  "usefull":{
-    "chatbot_1":{
-      "option":st.session_state['c4_option_1'],
-      "comment":st.session_state['c4_txt_1']
+    "usefull":{
+      "chatbot_1":{
+        "option":st.session_state['c4_option_1'],
+        "comment":st.session_state['c4_txt_1']
+      },
+      "chatbot_2":{
+        "option":st.session_state['c4_option_2'],
+        "comment":st.session_state['c4_txt_2']
+      },
+      "perferred_chatbot": st.session_state['c4_perfer']
     },
-    "chatbot_2":{
-      "option":st.session_state['c4_option_2'],
-      "comment":st.session_state['c4_txt_2']
-    },
-    "perferred_chatbot": st.session_state['c4_perfer']
-  },
 
-  "final_comment":st.session_state['final']
-}
+    "final_comment":st.session_state['final']
+  }
 
 if "disabled" not in st.session_state:
     st.session_state["disabled"] = False
