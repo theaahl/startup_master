@@ -11,3 +11,4 @@ dnspython==1.16.0
 #pymongo[srv]
 extra_streamlit_components>=0.1.60
 streamlit_extras>=0.3.6
+streamlit_js_eval
