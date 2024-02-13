@@ -1,3 +1,15 @@
 iframe{
     display: none;
 }
+/*
+button[kind="primary"] {
+   border: 1px solid;
+   border-color: rgba(18, 52, 86, 0.2);
+  }*/
+
+
+div[data-testid=stToast] {
+    background-color: rgba(51, 122, 118, 0.8);/* #337a76;*/
+    width: 25%;
+    color: white;
+}
