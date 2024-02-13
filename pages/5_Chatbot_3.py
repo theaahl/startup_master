@@ -29,7 +29,7 @@ client = init_connection()
 components.sidebar_nav(False)
 
 ### HEADER ###
-components.sticky_header("Chatbot 1", "Chatbot 2", "Chatbot 3")
+components.sticky_header("Chatbot 2", "Chatbot 3", "Feedback")
 if('user_id' not in st.session_state):
     st.write("You need to consent in the \"Home\" page to get access")
     switch_page("Chatbot")
@@ -49,14 +49,14 @@ else:
     def get_chatlog():
         log = {}
         message_id_count = 0
-        for msg in st.session_state.chatbot2_messages:
+        for msg in st.session_state.chatbot3_messages:
             log[str(message_id_count)] = {"role":msg.get("role"), "content":msg.get("content")}
             message_id_count += 1
 
         return log
 
     def get_userchat(chatlog):
-        userchat = {"Task-1":{"id": st.session_state['user_id'], "time": datetime.now(), "Chatbot-2": chatlog}}
+        userchat = {"Task-1":{"id": st.session_state['user_id'], "time": datetime.now(), "Chatbot-3": chatlog}}
         return userchat
 
     def update_chat_db():
@@ -68,37 +68,18 @@ else:
 
         if len(list(db.cycle_1.find({"Task-1.id": st.session_state['user_id']}))) > 0:
             print("opdaterte chatobjekt")
-            db.cycle_1.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-2": chatlog}})
-            backup_db.cycle_1.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-2": chatlog}})
+            db.cycle_1.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-3": chatlog}})
+            backup_db.cycle_1.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Chatbot-3": chatlog}})
 
         else:
             write_data(get_userchat(chatlog))
             print("lagret ny chatobjekt")
 
 
-    if "chatbot2_messages" not in st.session_state:
-        st.session_state["chatbot2_messages"] = [{"role": "assistant", "content": "How can I help you?"}]
-        # db = client.usertests 
-
-        # chatlog = []
-
-        # if len(list(db.cycle_1.find({"Task-1.id": st.session_state['user_id']}))) > 0:
-        #     chatlog = db.cycle_1.find({"Task-1.id": st.session_state['user_id']}).distinct("Task-1.Chatbot-2")
-
-        # print(len(chatlog))
-        # if len(chatlog) > 0:
-        #     chatlog = db.cycle_1.find({"Task-1.id": st.session_state['user_id']}).distinct("Task-1.Chatbot-2")
-        #     msg_count = 0
-        #     st.session_state["chatbot2_messages"] = []
-        #     for msg in chatlog[0]:            
-        #         st.session_state.chatbot2_messages.append({"role": chatlog[0][str(msg_count)]['role'], "content": chatlog[0][str(msg_count)]['content']})
-        #         print(msg)
-        #         msg_count += 1
-
-        # else:
-        #     st.session_state["chatbot2_messages"] = [{"role": "assistant", "content": "How can I help you?"}]
-
-    for msg in st.session_state.chatbot2_messages:
+    if "chatbot3_messages" not in st.session_state:
+        st.session_state["chatbot3_messages"] = [{"role": "assistant", "content": "How can I help you?"}]
+      
+    for msg in st.session_state.chatbot3_messages:
         st.chat_message(msg["role"]).write(msg["content"])
 
     if prompt := st.chat_input():
@@ -107,11 +88,11 @@ else:
             st.stop()
 
         APIclient = OpenAI(api_key=st.secrets.api.key)
-        st.session_state.chatbot2_messages.append({"role": "user", "content": prompt})
+        st.session_state.chatbot3_messages.append({"role": "user", "content": prompt})
         st.chat_message("user").write(prompt)
-        response = APIclient.chat.completions.create(model="gpt-4", messages=st.session_state.chatbot2_messages)
+        response = APIclient.chat.completions.create(model="gpt-4", messages=st.session_state.chatbot3_messages)
         msg = response.choices[0].message.content
-        st.session_state.chatbot2_messages.append({"role": "assistant", "content": msg})
+        st.session_state.chatbot3_messages.append({"role": "assistant", "content": msg})
         st.chat_message("assistant").write(msg)
 
         update_chat_db()
