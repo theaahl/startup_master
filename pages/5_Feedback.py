@@ -22,7 +22,11 @@ def init_connection():
 client = init_connection()
 
 def init_cookies():
-  states = ["c1_option_1", "c1_txt_1", "c1_option_2", "c1_txt_2", "c1_perfer", "c2_option_1", "c2_txt_1", "c2_option_2", "c2_txt_2", "c2_perfer", "c3_option_1", "c3_txt_1", "c3_option_2", "c3_txt_2", "c3_perfer", "c4_option_1", "c4_txt_1", "c4_option_2", "c4_txt_2", "c4_perfer","final"]
+  states = ["c1_option_1", "c1_txt_1", "c1_option_2", "c1_txt_2", "c1_option_3", "c1_txt_3", "c1_perfer", 
+            "c2_option_1", "c2_txt_1", "c2_option_2", "c2_txt_2", "c2_option_3", "c2_txt_3", "c2_perfer", 
+            "c3_option_1", "c3_txt_1", "c3_option_2", "c3_txt_2", "c3_option_3", "c3_txt_3", "c3_perfer", 
+            "c4_option_1", "c4_txt_1", "c4_option_2", "c4_txt_2", "c4_option_3", "c4_txt_3", "c4_perfer",
+            "final"]
 
   for state in states:
     if state not in st.session_state:
@@ -74,7 +78,7 @@ def update_chat_db(feedback):
 
 def gather_feedback():
   return {
-    "correct":{
+    "effective":{
       "chatbot_1":{
         "option":st.session_state['c1_option_1'],
         "comment":st.session_state['c1_txt_1']
@@ -83,10 +87,14 @@ def gather_feedback():
         "option":st.session_state['c1_option_2'],
         "comment":st.session_state['c1_txt_2']
       },
+      "chatbot_3":{
+        "option":st.session_state['c1_option_3'],
+        "comment":st.session_state['c1_txt_3']
+      },
     "perferred_chatbot": st.session_state['c1_perfer']
     },
 
-    "complete":{
+    "efficient":{
       "chatbot_1":{
         "option":st.session_state['c2_option_1'],
         "comment":st.session_state['c2_txt_1']
@@ -95,10 +103,14 @@ def gather_feedback():
         "option":st.session_state['c2_option_2'],
         "comment":st.session_state['c2_txt_2']
       },
+      "chatbot_3":{
+        "option":st.session_state['c2_option_3'],
+        "comment":st.session_state['c2_txt_3']
+      },
       "perferred_chatbot": st.session_state['c2_perfer']
     },
 
-    "consistent":{
+    "reliable":{
       "chatbot_1":{
         "option":st.session_state['c3_option_1'],
         "comment":st.session_state['c3_txt_1']
@@ -107,10 +119,14 @@ def gather_feedback():
         "option":st.session_state['c3_option_2'],
         "comment":st.session_state['c3_txt_2']
       },
+      "chatbot_3":{
+        "option":st.session_state['c3_option_3'],
+        "comment":st.session_state['c3_txt_3']
+      },
       "perferred_chatbot": st.session_state['c3_perfer']
     },
 
-    "usefull":{
+    "satifactory":{
       "chatbot_1":{
         "option":st.session_state['c4_option_1'],
         "comment":st.session_state['c4_txt_1']
@@ -118,6 +134,10 @@ def gather_feedback():
       "chatbot_2":{
         "option":st.session_state['c4_option_2'],
         "comment":st.session_state['c4_txt_2']
+      },
+      "chatbot_3":{
+        "option":st.session_state['c4_option_3'],
+        "comment":st.session_state['c4_txt_3']
       },
       "perferred_chatbot": st.session_state['c4_perfer']
     },
@@ -136,13 +156,13 @@ def disable():
 st.caption("Please rate your experience with the chat based on the following criteria:")
 
 selectionbox_options = ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"]
-preferation_options = ["Chatbot 1", "Chatbot 2", "No difference"]
+preferation_options = ["Chatbot 1", "Chatbot 2", "Chatbot 3", "Tie between Chatbot 1 and Chatbot 2", "Tie between Chatbot 2 and Chatbot 3", "Tie between Chatbot 1 and Chatbot 3", "No difference"]
 
 def get_selected_option(selection_type, selected):
   value = st.session_state[selected]
   return None if value == '' or value == None else selection_type.index(value)
 
-#Correctness
+#Effectiveness
 st.subheader("Effectiveness")
 with st.expander(":bulb:  Effectiveness explenation", expanded=True): #Kan legge til ,True hvis den skal være åpen som default
   # st.write("Correctness indicates ..... .....")
@@ -173,8 +193,18 @@ value=st.session_state['c1_txt_2'],placeholder="Comment"
 )
 st.session_state['c1_txt_2'] = c1_txt_2
 
+st.markdown("**Chatbot 3**")
+c1_option_3 = st.selectbox('​​To what degree did you feel the answers you received correspond with the **Effectiveness**-attribute for **Chatbot 3**',selectionbox_options,placeholder="Choose an option",index=get_selected_option(selectionbox_options, "c1_option_3"))
+st.session_state['c1_option_3'] = c1_option_3
+
+c1_txt_3 = st.text_area(
+"Comment on **Effectiveness** for **Chatbot 3**",
+value=st.session_state['c1_txt_3'],placeholder="Comment"
+)
+st.session_state['c1_txt_3'] = c1_txt_3
+
 c1_prefer = st.selectbox(
-   "Which chatbot do you think gave the most effective answers?",
+   "**Which chatbot do you think gave the most effective answers?**",
    preferation_options,
    index=get_selected_option(preferation_options, "c1_perfer"),
    placeholder="Select chatbot",
@@ -182,7 +212,7 @@ c1_prefer = st.selectbox(
 st.session_state['c1_perfer'] = c1_prefer
 
 
-#Completeness
+#Efficiency
 st.subheader("Efficiency")
 with st.expander(":bulb:  Efficiency explenation", expanded=True):
   # st.write("Completeness indicates ..... .....")
@@ -210,16 +240,26 @@ value=st.session_state['c2_txt_2'], placeholder="Comment"
 )
 st.session_state['c2_txt_2'] = c2_txt_2
 
+st.markdown("**Chatbot 3**")
+c2_option_3 = st.selectbox('​​To what degree did you feel the answers you received correspond with the **Efficiency**-attribute for **Chatbot 3**',selectionbox_options,placeholder="Choose an option",index=get_selected_option(selectionbox_options, "c2_option_3"))
+st.session_state['c2_option_3'] = c2_option_3
+
+c2_txt_3 = st.text_area(
+"Comment on **Efficiency** for **Chatbot 3**",
+value=st.session_state['c2_txt_3'],placeholder="Comment"
+)
+st.session_state['c2_txt_3'] = c2_txt_3
+
 c2_prefer = st.selectbox(
-   "Which chatbot do you think gave the most efficient answers",
-   ("Chatbot 1", "Chatbot 2", "No difference"),
+   "**Which chatbot do you think gave the most efficient answers**",
+   preferation_options,
    index=get_selected_option(preferation_options, "c2_perfer"),
    placeholder="Select chatbot",
 )
 st.session_state['c2_perfer'] = c2_prefer
 
 
-#Consinstency
+#Reliability
 st.subheader("Reliability")
 with st.expander(":bulb:  Reliability explenation", expanded=True):
   #st.write("Consinstency indicates ..... .....")
@@ -247,17 +287,26 @@ value=st.session_state['c3_txt_2'],placeholder="Comment"
 )
 st.session_state['c3_txt_2'] = c3_txt_2
 
+st.markdown("**Chatbot 3**")
+c3_option_3 = st.selectbox('​​To what degree did you feel the answers you received correspond with the **Reliability**-attribute for **Chatbot 3**',selectionbox_options,placeholder="Choose an option",index=get_selected_option(selectionbox_options, "c3_option_3"))
+st.session_state['c3_option_3'] = c3_option_3
+
+c3_txt_3 = st.text_area(
+"Comment on **Reliability** for **Chatbot 3**",
+value=st.session_state['c3_txt_3'],placeholder="Comment"
+)
+st.session_state['c3_txt_3'] = c3_txt_3
 
 c3_prefer = st.selectbox(
-   "Which chatbot do you think gave the most reliable answers",
-   ("Chatbot 1", "Chatbot 2", "No difference"),
+   "**Which chatbot do you think gave the most reliable answers**",
+   preferation_options,
    index=get_selected_option(preferation_options, "c3_perfer"),
    placeholder="Select chatbot",
 )
 st.session_state['c3_perfer'] = c3_prefer
 
 
-#Usefulness
+#Satisfaction
 st.subheader("Satisfaction")
 with st.expander(":bulb:  Satisfaction explenation", expanded=True):
   #st.write("Consinstency indicates ..... .....")
@@ -286,10 +335,19 @@ value=st.session_state['c4_txt_2'],placeholder="Comment"
 )
 st.session_state['c4_txt_2'] = c4_txt_2
 
+st.markdown("**Chatbot 3**")
+c4_option_3 = st.selectbox('​​To what degree did you feel the answers you received correspond with the **Satisfaction**-attribute for **Chatbot 3**',selectionbox_options,placeholder="Choose an option",index=get_selected_option(selectionbox_options, "c4_option_3"))
+st.session_state['c4_option_3'] = c4_option_3
+
+c4_txt_3 = st.text_area(
+"Comment on **Satisfaction** for **Chatbot 3**",
+value=st.session_state['c4_txt_3'],placeholder="Comment"
+)
+st.session_state['c4_txt_3'] = c4_txt_3
 
 c4_prefer = st.selectbox(
-   "Which chatbot do you think gave the most satifactory answers",
-   ("Chatbot 1", "Chatbot 2", "No difference"),
+   "**Which chatbot do you think gave the most satifactory answers**",
+   preferation_options,
    index=get_selected_option(preferation_options, "c4_perfer"),
    placeholder="Select chatbot",
 )
