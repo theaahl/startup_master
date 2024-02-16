@@ -1,11 +1,6 @@
 import streamlit as st
-from openai import OpenAI
-from streamlit_extras.switch_page_button import switch_page
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
-from datetime import datetime
-from st_pages import add_indentation,hide_pages
-import extra_streamlit_components as stx
 import app_components as components 
 import chatbot_utils as cu
 

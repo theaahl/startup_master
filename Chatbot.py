@@ -1,8 +1,5 @@
 from datetime import datetime
-from openai import OpenAI
 import streamlit as st
-from st_pages import hide_pages
-import extra_streamlit_components as stx
 import uuid
 import app_components as components 
 from pymongo import MongoClient
@@ -17,8 +14,6 @@ def local_css(file_name):
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 local_css("./styles.css")
-
-# hide_pages([ "Chatbot_1", "Chatbot_2", "Feedback", "Task_Information"])
 
 if 'user_id' not in st.session_state:
     st.session_state['user_id'] = None
@@ -40,7 +35,6 @@ st.write("This website serves as a prototype developed as part of a master thesi
 st.write("Through this prototype we specifically aim to analyze and compare various versions of ChatGPT to identify models that best align with critical startup use cases. Obtaining real-world input is crucial in evaluating the efficacy of ChatGPT models in practical scenarios. Gaining the insights from potential users associated with startups is thereby a big help.")
 st.write("The anticipated outcome of this research is a more effective use of AI tools like ChatGPT in startups. By customizing these tools to the specific needs startup companies, this project aspires to contribute to a future where more startups can thrive and succeed.")
 
-# components.demographic_form()
 def gather_feedback():
   return {
     "stage": st.session_state['stage'],
@@ -105,7 +99,7 @@ def display_form():
 
     st.session_state['stage'] = st.selectbox("Stage", options=stage_options, index=get_selectbox_index(stage_options, 'stage'), placeholder="Select an option")
     st.session_state['year'] = st.selectbox("Year of business", year_options, index=get_selectbox_index(year_options, 'year'), placeholder="Select an option")
-    st.session_state['size'] = st.number_input("Size of business", value=st.session_state.get('size'), placeholder="Number of employees")
+    st.session_state['size'] = st.number_input("Size of business", value=st.session_state.get('size'), placeholder="Number of employees", )
     st.session_state['industry'] = st.text_input("Industry", value=st.session_state.get('industry', ''), placeholder="Technology, healthcare, finance, etc.")
     # Uncomment the following line if needed
     # st.session_state['revenue'] = st.selectbox("Revenue Range", ["No revenue", "<1M NOK", "1M-10M NOK", ">10M NOK"], placeholder="Select an option") 
@@ -146,8 +140,6 @@ withdraw_button_container = st.empty()
 if st.session_state['user_id'] is None:
     withdraw_button_container.button("Click to withdraw from study", type="primary", disabled=True)
 else:
-    #withdraw_button = withdraw_button_container.button("Click to withdraw from study", disabled=False) ## Ad functionality to delete user data
-    
     if withdraw_button_container.button("Click to withdraw from study", type="primary", disabled=False):
         
         print("witdrawn") ## Add modal when feature is released
@@ -168,7 +160,6 @@ else:
 
         streamlit_js_eval(js_expressions="parent.window.location.reload()")
 ####### SIDEBAR #######
-#components.sidebar_nav(st.session_state["user_id"] == None)
 components.sidebar_nav(st.session_state['user_id'] is None)
 
 st.header("Confidentiality and Data Protection")
@@ -191,11 +182,3 @@ st.write("If you have any questions or feedback on the prototype, please don't h
 st.markdown('<a href="mailto:thealah@stud.ntnu.no">thealah@stud.ntnu.no</a>', unsafe_allow_html=True)
 st.markdown('<a href="mailto:helenfs@stud.ntnu.no">helenfs@stud.ntnu.no</a>', unsafe_allow_html=True)
 
-
-## applying style
-style = """<style>
-div[data-testid='stVerticalBlock']:has(div#chat_inner):not(:has(div#chat_outer)) {background-color: rgba(51, 122, 118, 0.2); border-radius:10px; padding:16px;};
-</style>
-"""
-
-st.markdown(style, unsafe_allow_html=True)
