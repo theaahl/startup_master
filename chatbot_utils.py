@@ -41,7 +41,7 @@ def update_chat_db(client, session_storage_name, chatbot):
         print("lagret ny chatobjekt")
 
 
-def init_chatbot(client, task, session_storage_name, chatbot):
+def init_chatbot(client, task, session_storage_name, chatbot, gpt_model):
     if('user_id' not in st.session_state):
         st.write("You need to consent in the \"Home\" page to get access")
         switch_page("Chatbot")
@@ -67,7 +67,7 @@ def init_chatbot(client, task, session_storage_name, chatbot):
           
             with st.chat_message("assistant"):
                 stream = APIclient.chat.completions.create(
-                    model="gpt-3.5-turbo",
+                    model=gpt_model,
                     messages=[
                         {"role": m["role"], "content": m["content"]}
                         for m in st.session_state[session_storage_name]
