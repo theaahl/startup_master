@@ -100,7 +100,7 @@ def display_form():
 
     st.session_state['stage'] = st.selectbox("Stage", options=stage_options, index=get_selectbox_index(stage_options, 'stage'), placeholder="Select an option")
     st.session_state['year'] = st.selectbox("Year of business", year_options, index=get_selectbox_index(year_options, 'year'), placeholder="Select an option")
-    st.session_state['size'] = st.number_input("Size of business", value=st.session_state.get('size'), placeholder="Number of employees", )
+    st.session_state['size'] = st.number_input("Size of business", step=1, min_value=0, value=st.session_state.get('size'), placeholder="Number of employees", )
     st.session_state['industry'] = st.text_input("Industry", value=st.session_state.get('industry', ''), placeholder="Technology, healthcare, finance, etc.")
     # Uncomment the following line if needed
     # st.session_state['revenue'] = st.selectbox("Revenue Range", ["No revenue", "<1M NOK", "1M-10M NOK", ">10M NOK"], placeholder="Select an option") 
@@ -108,7 +108,7 @@ def display_form():
 
     st.caption("Personal details")
     st.session_state['role'] = st.text_input("Company Role", value=st.session_state.get('role', ''), placeholder="CEO, CTO, backend developer, UI/UX designer, etc.")
-    st.session_state['birth_year'] = st.number_input("Year of birth", value=st.session_state.get('birth_year'), placeholder="YYYY", )
+    st.session_state['birth_year'] = st.number_input("Year of birth", step=1, min_value=0, value=st.session_state.get('birth_year'), placeholder="YYYY", )
     st.session_state['gpt_experience'] = st.selectbox("Level of experience with ChatGPT", gpt_exp_options, index=get_selectbox_index(gpt_exp_options, 'gpt_experience'), placeholder="Select an option")
 
 def handle_submit(is_new_user, submit_text):
