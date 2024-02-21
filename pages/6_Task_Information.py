@@ -1,10 +1,5 @@
-import datetime
-import uuid
 import streamlit as st
-from st_pages import add_indentation, hide_pages, show_pages_from_config
 from streamlit_extras.switch_page_button import switch_page
-import extra_streamlit_components as stx
-import time
 import app_components as components 
 
 st.set_page_config(layout = "wide", page_title="StartupGPT")
