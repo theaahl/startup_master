@@ -189,7 +189,7 @@ st.write("The project is estimated to finish in the early summer of 2024. All da
 
 st.subheader("What gives us the right to handle data about you?")
 st.write("We process information about you based on your consent.")
-st.write("On behalf of NTNU, Sikt – The Knowledge Sector's Service Provider (Kunnskapssektorens tjenesteleverandør in Norwegian) has assessed that the processing of personal data in this project is in accordance with the data protection regulations.")
+# st.write("On behalf of NTNU, Sikt – The Knowledge Sector's Service Provider (Kunnskapssektorens tjenesteleverandør in Norwegian) has assessed that the processing of personal data in this project is in accordance with the data protection regulations.")
 
 st.subheader("Rights of participants")
 st.write("As long as you can be identified in the data material, you have the right to:")
@@ -210,13 +210,13 @@ st.markdown(s,unsafe_allow_html=True)
 st.markdown("\n")
 st.write("Our data protection officer:")
 st.markdown('- Thomas Helgesen: <a href="mailto:thomas.helgesen@ntnu.no">thomas.helgesen@ntnu.no</a> \n', unsafe_allow_html=True)
-st.write("If you have any questions related to the assessment made by the privacy services from Sikt, you can contact them via:")
+# st.write("If you have any questions related to the assessment made by the privacy services from Sikt, you can contact them via:")
 # st.markdown('<p>Epost: <a href="mailto:personverntjenester@sikt.no">personverntjenester@sikt.no</a> or phone: 73 98 40 40.</p>', unsafe_allow_html=True)
-lst4 = ['<p>Epost: <a href="mailto:personverntjenester@sikt.no">personverntjenester@sikt.no</a> or phone: 73 98 40 40.</p>']
-s = ''
-for i in lst4:
-    s += "- " + i + "\n"
-st.markdown(s,unsafe_allow_html=True)
+# lst4 = ['<p>Epost: <a href="mailto:personverntjenester@sikt.no">personverntjenester@sikt.no</a> or phone: 73 98 40 40.</p>']
+# s = ''
+# for i in lst4:
+#     s += "- " + i + "\n"
+# st.markdown(s,unsafe_allow_html=True)
 
 ####### SIDEBAR #######
 components.sidebar_nav(st.session_state['user_id'] is None)
