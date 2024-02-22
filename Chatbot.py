@@ -45,8 +45,8 @@ def gather_feedback():
 def write_data(mydict):
     db = client.usertests #establish connection to the 'test_db' db
     backup_db = client.usertests_backup
-    items = db.cycle_1 # return all result from the 'test_chats' collection
-    items_backup = backup_db.cycle_1
+    items = db.cycle_2 # return all result from the 'test_chats' collection
+    items_backup = backup_db.cycle_2
     items.insert_one(mydict)
     items_backup.insert_one(mydict)
 
@@ -62,12 +62,12 @@ def update_chat_db(feedback):
     print("form:", user_feedback)
     print("userid:", st.session_state['user_id'])
 
-    print(len(list(db.cycle_1.find({"Task-1.id": st.session_state['user_id']}))))
+    print(len(list(db.cycle_2.find({"Task-1.id": st.session_state['user_id']}))))
 
-    if len(list(db.cycle_1.find({"Task-1.id": st.session_state['user_id']}))) > 0:
+    if len(list(db.cycle_2.find({"Task-1.id": st.session_state['user_id']}))) > 0:
         print("opdaterte chatobjekt")
-        db.cycle_1.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Demographic": feedback}})
-        backup_db.cycle_1.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Demographic": feedback}})
+        db.cycle_2.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Demographic": feedback}})
+        backup_db.cycle_2.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Demographic": feedback}})
 
     else:
         write_data(user_feedback)
@@ -84,9 +84,9 @@ def get_selectbox_index(option_list, session_state_key):
 
 def display_form():
     # """Displays the form for both new and returning users."""
-    st.subheader("Demogaphics and consent form")
+    st.subheader("Demographics and consent form")
     st.write("By submitting the form you are consenting to:")
-    lst3= ["having received and understood information about the project","having had the opportunity to ask questions", "the participation in this reseach, including communicating with chatbots and answering the questionnaire", "the collection of your data as described in on this page"]
+    lst3= ["having received and understood information about the project","having had the opportunity to ask questions", "the participation in this research, including communicating with chatbots and answering the questionnaire", "the collection of your data as described in on this page"]
     s = ''
     for i in lst3:
         s += "- " + i + "\n"
@@ -96,7 +96,7 @@ def display_form():
     st.caption("Business details")
     stage_options = ["Seed stage", "Early stage", "Growth stage", "Mature stage"]
     year_options = ["<1 year", "2-5 years", "5-10 years", ">10 years"]
-    gpt_exp_options = ["No experience", "Some experience", "Very familiar"]
+    gpt_exp_options = ["No experience", "Beginner", "Intermediate", "Experienced", "Advanced"]
 
     st.session_state['stage'] = st.selectbox("Stage", options=stage_options, index=get_selectbox_index(stage_options, 'stage'), placeholder="Select an option")
     st.session_state['year'] = st.selectbox("Year of business", year_options, index=get_selectbox_index(year_options, 'year'), placeholder="Select an option")
@@ -128,7 +128,7 @@ with st.form("test_form"):
     is_new_user = st.session_state.get('user_id') is None
     display_form()
 
-    submit_text = "Submit dempgraphics and consent to continue" if is_new_user else "Click to update form information"
+    submit_text = "Submit demographics and consent to continue" if is_new_user else "Click to update form information"
     button_container = st.empty()
 
     if button_container.form_submit_button(submit_text):
@@ -162,9 +162,9 @@ else:
         db = client.usertests
         backup_db = client.usertests_backup
 
-        if len(list(db.cycle_1.find({"Task-1.id": st.session_state['user_id']}))) > 0:
-            db.cycle_1.delete_one({"Task-1.id": st.session_state['user_id']})
-            backup_db.cycle_1.delete_one({"Task-1.id": st.session_state['user_id']})
+        if len(list(db.cycle_2.find({"Task-1.id": st.session_state['user_id']}))) > 0:
+            db.cycle_2.delete_one({"Task-1.id": st.session_state['user_id']})
+            backup_db.cycle_2.delete_one({"Task-1.id": st.session_state['user_id']})
 
         for key in st.session_state.keys():
             del st.session_state[key]
@@ -189,7 +189,7 @@ st.write("The project is estimated to finish in the early summer of 2024. All da
 
 st.subheader("What gives us the right to handle data about you?")
 st.write("We process information about you based on your consent.")
-# st.write("On behalf of NTNU, Sikt – The Knowledge Sector's Service Provider (Kunnskapssektorens tjenesteleverandør in Norwegian) has assessed that the processing of personal data in this project is in accordance with the data protection regulations.")
+st.write("On behalf of NTNU, Sikt – The Knowledge Sector's Service Provider (Kunnskapssektorens tjenesteleverandør in Norwegian) has assessed that the processing of personal data in this project is in accordance with the data protection regulations.")
 
 st.subheader("Rights of participants")
 st.write("As long as you can be identified in the data material, you have the right to:")
@@ -210,13 +210,13 @@ st.markdown(s,unsafe_allow_html=True)
 st.markdown("\n")
 st.write("Our data protection officer:")
 st.markdown('- Thomas Helgesen: <a href="mailto:thomas.helgesen@ntnu.no">thomas.helgesen@ntnu.no</a> \n', unsafe_allow_html=True)
-# st.write("If you have any questions related to the assessment made by the privacy services from Sikt, you can contact them via:")
-# st.markdown('<p>Epost: <a href="mailto:personverntjenester@sikt.no">personverntjenester@sikt.no</a> or phone: 73 98 40 40.</p>', unsafe_allow_html=True)
-# lst4 = ['<p>Epost: <a href="mailto:personverntjenester@sikt.no">personverntjenester@sikt.no</a> or phone: 73 98 40 40.</p>']
-# s = ''
-# for i in lst4:
-#     s += "- " + i + "\n"
-# st.markdown(s,unsafe_allow_html=True)
+st.write("If you have any questions related to the assessment made by the privacy services from Sikt, you can contact them via:")
+st.markdown('<p>Epost: <a href="mailto:personverntjenester@sikt.no">personverntjenester@sikt.no</a> or phone: 73 98 40 40.</p>', unsafe_allow_html=True)
+lst4 = ['<p>Epost: <a href="mailto:personverntjenester@sikt.no">personverntjenester@sikt.no</a> or phone: 73 98 40 40.</p>']
+s = ''
+for i in lst4:
+    s += "- " + i + "\n"
+st.markdown(s,unsafe_allow_html=True)
 
 ####### SIDEBAR #######
 components.sidebar_nav(st.session_state['user_id'] is None)
