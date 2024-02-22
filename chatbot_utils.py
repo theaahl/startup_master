@@ -3,11 +3,13 @@ from datetime import datetime
 from openai import OpenAI
 from streamlit_extras.switch_page_button import switch_page
 
+task_1_description = "In this user test, your task is to act as an early-stage tech startup that is in the process of idea validation and developing your first prototype. Ask the chatbots questions you would consider natural for an early-stage startup to have regarding idea validation and early prototype development. Test out all the chatbots (Chatbot 1, Chatbot 2 and Chatbot 3), then answer the questionnaire. Ask all chatbots the same initial question, then let the conversation flow naturally for each chatbot."
+
 def write_data(mydict, client):
     db = client.usertests #establish connection to the 'test_db' db
     backup_db = client.usertests_backup
-    items = db.cycle_1 # return all result from the 'test_chats' collection
-    items_backup = backup_db.cycle_1
+    items = db.cycle_2 # return all result from the 'test_chats' collection
+    items_backup = backup_db.cycle_2
     items.insert_one(mydict)
     items_backup.insert_one(mydict)
 
@@ -29,25 +31,25 @@ def update_chat_db(client, session_storage_name, chatbot):
     chatlog = get_chatlog(session_storage_name)
     backup_db = client.usertests_backup
     
-    print(len(list(db.cycle_1.find({"Task-1.id": st.session_state['user_id']}))))
+    print(len(list(db.cycle_2.find({"Task-1.id": st.session_state['user_id']}))))
 
-    if len(list(db.cycle_1.find({"Task-1.id": st.session_state['user_id']}))) > 0:
+    if len(list(db.cycle_2.find({"Task-1.id": st.session_state['user_id']}))) > 0:
         print("opdaterte chatobjekt")
-        db.cycle_1.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1."+chatbot: chatlog}})
-        backup_db.cycle_1.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1."+chatbot: chatlog}})
+        db.cycle_2.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1."+chatbot: chatlog}})
+        backup_db.cycle_2.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1."+chatbot: chatlog}})
 
     else:
         write_data(get_userchat(chatlog, chatbot), client)
         print("lagret ny chatobjekt")
 
 
-def init_chatbot(client, task, session_storage_name, chatbot, gpt_model, system_description):
+def init_chatbot(client, session_storage_name, chatbot, gpt_model, system_description):
     if('user_id' not in st.session_state):
         st.write("You need to consent in the \"Home\" page to get access")
         switch_page("Chatbot")
     else:
-        with st.expander("View Task *(PS: Ask both chatbots the **same initial question**, then let the conversation flow naturally for each chatbot.)*"):
-            st.write(task)
+        with st.expander("View Task *(NB: Ask all chatbots the **same initial question**, then let the conversation flow naturally for each chatbot.)*"):
+            st.write(task_1_description)
 
         if session_storage_name not in st.session_state:
             st.session_state[session_storage_name] = [{"role": "assistant", "content": "How can I help you?"}]

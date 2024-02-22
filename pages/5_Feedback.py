@@ -46,8 +46,8 @@ if('user_id' not in st.session_state):
 def write_data(mydict):
     db = client.usertests #establish connection to the 'test_db' db
     backup_db = client.usertests_backup
-    items = db.cycle_1 # return all result from the 'test_chats' collection
-    items_backup = backup_db.cycle_1
+    items = db.cycle_2 # return all result from the 'test_chats' collection
+    items_backup = backup_db.cycle_2
     items.insert_one(mydict)
     items_backup.insert_one(mydict)
 
@@ -63,12 +63,12 @@ def update_chat_db(feedback):
     print("feedback:", user_feedback)
     print("userid:", st.session_state['user_id'])
 
-    print(len(list(db.cycle_1.find({"Task-1.id": st.session_state['user_id']}))))
+    print(len(list(db.cycle_2.find({"Task-1.id": st.session_state['user_id']}))))
 
-    if len(list(db.cycle_1.find({"Task-1.id": st.session_state['user_id']}))) > 0:
+    if len(list(db.cycle_2.find({"Task-1.id": st.session_state['user_id']}))) > 0:
         print("opdaterte chatobjekt")
-        db.cycle_1.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Feedback": feedback}})
-        backup_db.cycle_1.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Feedback": feedback}})
+        db.cycle_2.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Feedback": feedback}})
+        backup_db.cycle_2.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Feedback": feedback}})
 
     else:
         write_data(user_feedback)
@@ -130,9 +130,9 @@ def get_selected_option(selection_type, selected):
 
 #Effectiveness
 st.subheader("Effectiveness")
-with st.expander(":bulb:  Effectiveness explenation", expanded=True): #Kan legge til ,True hvis den skal være åpen som default
+with st.expander(":bulb:  Effectiveness explanation", expanded=True): #Kan legge til ,True hvis den skal være åpen som default
   # st.write("Correctness indicates ..... .....")
-  lst = ["To which degree does the chatbot provide you with answers that are accurate, precise and complete.", "Answers are correct and relevant, with no significant part lacking from the answer, and that all the users questions and subquestions are answered."]
+  lst = ["To which degree does the chatbot provide you with answers that are accurate, precise and complete.", "Answers are correct and relevant, with no significant part lacking from the answer, and that all the users questions and sub-questions are answered."]
   s = ''
   for i in lst:
       s += "- " + i + "\n"
@@ -172,14 +172,14 @@ c1_prefer = st.selectbox(
 st.session_state['c1_perfer'] = c1_prefer
 
 c1_comment = st.text_area(
-"Is there anything you want to claryfy regarding the **Effectiveness** of any of the chatbots?",
+"Is there anything you want to clarify regarding the **Effectiveness** of any of the chatbots?",
 value=st.session_state['c1_comment'],placeholder="Comment"
 )
 st.session_state['c1_comment'] = c1_comment
 
 #Efficiency
 st.subheader("Efficiency")
-with st.expander(":bulb:  Efficiency explenation", expanded=True):
+with st.expander(":bulb:  Efficiency explanation", expanded=True):
   # st.write("Completeness indicates ..... .....")
   lst = ['The system should provide useful answers without the users needing to write too many prompts to specify what type of answer they are after.', 'How efficient the system is at catching what the users are after and providing a useful answer, with minimal user effort. ']
   s = ''
@@ -218,14 +218,14 @@ c2_prefer = st.selectbox(
 st.session_state['c2_perfer'] = c2_prefer
 
 c2_comment = st.text_area(
-"Is there anything you want to claryfy regarding the **Efficiency** of any of the chatbots?",
+"Is there anything you want to clarify regarding the **Efficiency** of any of the chatbots?",
 value=st.session_state['c2_comment'],placeholder="Comment"
 )
 st.session_state['c2_comment'] = c2_comment
 
 #Reliability
 st.subheader("Reliability")
-with st.expander(":bulb:  Reliability explenation", expanded=True):
+with st.expander(":bulb:  Reliability explanation", expanded=True):
   #st.write("Consinstency indicates ..... .....")
   lst = ['The answers have no apparent errors, and the users trust the correctness of the answers.']
   s = ''
@@ -264,16 +264,16 @@ c3_prefer = st.selectbox(
 st.session_state['c3_perfer'] = c3_prefer
 
 c3_comment = st.text_area(
-"Is there anything you want to claryfy regarding the **Reliability** of any of the chatbots?",
+"Is there anything you want to clarify regarding the **Reliability** of any of the chatbots?",
 value=st.session_state['c3_comment'],placeholder="Comment"
 )
 st.session_state['c3_comment'] = c3_comment
 
 #Satisfaction
 st.subheader("Satisfaction")
-with st.expander(":bulb:  Satisfaction explenation", expanded=True):
+with st.expander(":bulb:  Satisfaction explanation", expanded=True):
   #st.write("Consinstency indicates ..... .....")
-  lst = ['How pleased the user is with the overall quality of the answers and that the answers are percieved as usefull and contextually correct.']
+  lst = ['How pleased the user is with the overall quality of the answers and that the answers are perceived as useful and contextually correct.']
   s = ''
   for i in lst:
       s += "- " + i + "\n"
@@ -303,7 +303,7 @@ c4_option_3 = st.selectbox('​​To what degree did you feel the answers you re
 st.session_state['c4_option_3'] = c4_option_3
 
 c4_prefer = st.selectbox(
-   "**Which chatbot do you think gave the most satifactory answers**",
+   "**Which chatbot do you think gave the most satisfactory answers**",
    preferation_options,
    index=get_selected_option(preferation_options, "c4_perfer"),
    placeholder="Select chatbot",
@@ -311,7 +311,7 @@ c4_prefer = st.selectbox(
 st.session_state['c4_perfer'] = c4_prefer
 
 c4_comment = st.text_area(
-"Is there anything you want to claryfy regarding the **Satisfaction** of any of the chatbots?",
+"Is there anything you want to clarify regarding the **Satisfaction** of any of the chatbots?",
 value=st.session_state['c4_comment'],placeholder="Comment"
 )
 st.session_state['c4_comment'] = c4_comment
