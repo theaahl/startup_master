@@ -87,10 +87,10 @@ def display_form():
     st.subheader("Demographics and consent form")
     st.write("By submitting the form you are consenting to:")
     lst3= [
-        "having received and understood information about the project",
-        "having had the opportunity to ask questions", 
+        "having received and understood information about the project", 
         "the participation in this research, including communicating with chatbots and answering the questionnaire", 
-        "the collection of your data as described in on this page"
+        "the collection of your data as described in on this page",
+        "having had the opportunity to ask questions"
     ]
     s = ''
     for i in lst3:
