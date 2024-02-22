@@ -86,7 +86,12 @@ def display_form():
     # """Displays the form for both new and returning users."""
     st.subheader("Demographics and consent form")
     st.write("By submitting the form you are consenting to:")
-    lst3= ["having received and understood information about the project","having had the opportunity to ask questions", "the participation in this research, including communicating with chatbots and answering the questionnaire", "the collection of your data as described in on this page"]
+    lst3= [
+        "having received and understood information about the project",
+        "having had the opportunity to ask questions", 
+        "the participation in this research, including communicating with chatbots and answering the questionnaire", 
+        "the collection of your data as described in on this page"
+    ]
     s = ''
     for i in lst3:
         s += "- " + i + "\n"
@@ -94,14 +99,56 @@ def display_form():
     
 
     st.caption("Business details")
-    stage_options = ["Seed stage", "Early stage", "Growth stage", "Mature stage"]
-    year_options = ["<1 year", "2-5 years", "5-10 years", ">10 years"]
-    gpt_exp_options = ["No experience", "Beginner", "Intermediate", "Experienced", "Advanced"]
-
+    stage_options = [
+        "Seed Stage: Small team working on the development of a business plan and product, with minimal or personal funding.", 
+        "Early Stage: Product is introduced to the market, continued innovation is necessary, focus on building a customer base.", 
+        "Growth Stage: Established presence in the market and a steady customer base, focus on increasing revenue and market share.", 
+        "Expansion Stage: Well-established and financially stable, focus on maintaining market position and exploring new opportunities."
+    ]
+    year_options = [
+        "<1 year", 
+        "2-5 years", 
+        "5-10 years", 
+        ">10 years"
+    ]
+    gpt_exp_options = [
+        "No experience: I have never used ChatGPT or have only tried it once or twice", 
+        "Beginner: I have used ChatGPT a few times, but I'm still learning the basics", 
+        "Intermediate: I use ChatGPT regularly and am familiar with many of its features", 
+        "Experienced: I have extensive experience with ChatGPT and use it proficiently for various tasks", 
+        "Advanced: I deeply understand ChatGPTs capabilities and limitations, and have possibly used it in professional or advanced projects"
+    ]
+   
+    # https://www.ilo.org/global/industries-and-sectors/lang--en/index.htm
+    # industry = ["Agriculture; plantations;other rural sectors" ,"Basic Metal Production" ,"Chemical industries" ,"Commerce", "Construction", "Education", "Financial services; professional services", "Food; drink; tobacco", "Forestry; wood; pulp and paper", "Health services", "Hotels; tourism; catering", "Mining (coal; other mining)", "Mechanical and electrical engineering", "Media; culture; graphical", "Oil and gas production; oil refining", "Postal and telecommunications services", "Public service", "Shipping; ports; fisheries; inland waterways", "Textiles; clothing; leather; footwear", "Transport (including civil aviation; railways; road transport", "Transport equipment manufacturing","Utilities (water; gas; electricity)"] 
+   
+    # https://www.ssb.no/en/klass/klassifikasjoner/6 
+    industry = [
+        "Accommodation and Food Service Activities",
+        "Administrative and Support Service Activities",
+        "Agriculture, Forestry and Fishing",
+        "Arts, Entertainment and Recreation",
+        "Construction",
+        "Education",
+        "Electricity, Gas, Steam and Air Conditioning Supply",
+        "Financial and Insurance Activities",
+        "Human Health and Social Work Activities",
+        "Information and Communication",
+        "Manufacturing",
+        "Mining and Quarrying",
+        "Professional, Scientific and Technical Activities",
+        "Public Administration and Defence; Compulsory Social Security",
+        "Real Estate Activities",
+        "Transportation and Storage",
+        "Water Supply; Sewerage, Waste Management and Remediation Activities",
+        "Wholesale and Retail Trade; Repair of Motor Vehicles and Motorcycles",
+        "Other"
+    ]
     st.session_state['stage'] = st.selectbox("Stage", options=stage_options, index=get_selectbox_index(stage_options, 'stage'), placeholder="Select an option")
     st.session_state['year'] = st.selectbox("Year of business", year_options, index=get_selectbox_index(year_options, 'year'), placeholder="Select an option")
     st.session_state['size'] = st.number_input("Size of business", step=1, min_value=0, value=st.session_state.get('size'), placeholder="Number of employees", )
-    st.session_state['industry'] = st.text_input("Industry", value=st.session_state.get('industry', ''), placeholder="Technology, healthcare, finance, etc.")
+    #st.session_state['industry'] = st.text_input("Industry", value=st.session_state.get('industry', ''), placeholder="Technology, healthcare, finance, etc.")
+    st.session_state['industry'] = st.selectbox("Industry", industry, index=get_selectbox_index(industry, 'industry'), placeholder="Select an option")
     # Uncomment the following line if needed
     # st.session_state['revenue'] = st.selectbox("Revenue Range", ["No revenue", "<1M NOK", "1M-10M NOK", ">10M NOK"], placeholder="Select an option") 
     st.session_state['location'] = st.text_input("Location", value=st.session_state.get('location', ''), placeholder="City, Country")
@@ -178,7 +225,13 @@ else:
 
 
 st.subheader("Confidentiality and Data Protection")
-lst = ["We will only use your information for the purposes we have stated in this document.", "All personal data collected during this study will be treated confidentially and in accordance with privacy regulations.", "We will implement appropriate technical and organizational measures to ensure the security of your data.", "Data will be anonymized", "The data will be stored securely in a secure database and will only be accessible to the research team."]
+lst = [
+    "We will only use your information for the purposes we have stated in this document.", 
+    "All personal data collected during this study will be treated confidentially and in accordance with privacy regulations.", 
+    "We will implement appropriate technical and organizational measures to ensure the security of your data.", 
+    "Data will be anonymized", 
+    "The data will be stored securely in a secure database and will only be accessible to the research team."
+]
 s = ''
 for i in lst:
     s += "- " + i + "\n"
@@ -193,7 +246,11 @@ st.write("On behalf of NTNU, Sikt – The Knowledge Sector's Service Provider (K
 
 st.subheader("Rights of participants")
 st.write("As long as you can be identified in the data material, you have the right to:")
-lst2 = ["access information we process about you, and to receive a copy of the information","have personal information about you deleted", "send a complaint to the Norwegian Data Protection Authority (Datatilsynet) about the processing of your personal data"]
+lst2 = [
+    "access information we process about you, and to receive a copy of the information",
+    "have personal information about you deleted", 
+    "send a complaint to the Norwegian Data Protection Authority (Datatilsynet) about the processing of your personal data"
+]
 s = ''
 for i in lst2:
     s += "- " + i + "\n"
@@ -201,7 +258,11 @@ st.markdown(s)
 
 st.subheader("Contact")
 st.write("If you have any questions or feedback on the prototype, please don't hesitate to contact us!")
-lst5 = ['<p>Researcher, Thea Lovise Ahlgren: <a href="mailto:thealah@stud.ntnu.no">thealah@stud.ntnu.no</a></p>', '<p>Researcher, Helene Fønstelien Sunde: <a href="mailto:helenfs@stud.ntnu.no">helenfs@stud.ntnu.no</a></p>','<p>Project supervisor, Anh Nguyen-Duc: <a href="mailto:angu@usn.no">angu@usn.no</a></p>' ]
+lst5 = [
+    '<p>Researcher, Thea Lovise Ahlgren: <a href="mailto:thealah@stud.ntnu.no">thealah@stud.ntnu.no</a></p>', 
+    '<p>Researcher, Helene Fønstelien Sunde: <a href="mailto:helenfs@stud.ntnu.no">helenfs@stud.ntnu.no</a></p>',
+    '<p>Project supervisor, Anh Nguyen-Duc: <a href="mailto:angu@usn.no">angu@usn.no</a></p>' 
+]
 s = ''
 for i in lst5:
     s += "- " + i + "\n"
