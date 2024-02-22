@@ -29,5 +29,7 @@ components.sticky_header("Chatbot 1", "Chatbot 2", "Chatbot 3")
 
 session_storage_name = "chatbot2_messages"
 gpt_model = "gpt-4"
+system_description = ""
 
-cu.init_chatbot(client, session_storage_name,  "Chatbot-2", gpt_model)
+cu.init_chatbot(client, session_storage_name,  "Chatbot-2", gpt_model, system_description)
+

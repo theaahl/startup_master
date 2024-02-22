@@ -27,6 +27,8 @@ components.sticky_header("Task Information", "Chatbot 1", "Chatbot 2")
 
 session_storage_name = "chatbot1_messages"
 gpt_model = "gpt-3.5-turbo"
+system_description = ""
 
-cu.init_chatbot(client, session_storage_name, "Chatbot-1", gpt_model)
+cu.init_chatbot(client, session_storage_name, "Chatbot-1", gpt_model, system_description)
+
 
