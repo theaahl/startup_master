@@ -26,8 +26,7 @@ components.sidebar_nav(False)
 
 ### HEADER ###
 components.sticky_header("Chatbot 2", "Chatbot 3", "Feedback")
-task = "In this user test, your task is to act as an early-stage tech startup that is in the process of developing an MVP for your business. Ask the chatbots about something you wonder about regarding MVP development. Test out **both** Chatbot 1 and Chatbot 2, then answer the questionnaire. Ask both chatbots the **same initial question**, then let the conversation flow naturally for each chatbot."
 session_storage_name = "chatbot3_messages"
 gpt_model = "gpt-3.5-turbo"
 
-cu.init_chatbot(client, task, session_storage_name, "Chatbot-3", gpt_model)
+cu.init_chatbot(client, session_storage_name, "Chatbot-3", gpt_model)

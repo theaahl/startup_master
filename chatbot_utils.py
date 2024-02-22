@@ -3,6 +3,8 @@ from datetime import datetime
 from openai import OpenAI
 from streamlit_extras.switch_page_button import switch_page
 
+task_1_description = "In this user test, your task is to act as an early-stage tech startup that is in the process of idea validation and developing your first prototype. Ask the chatbots questions you would consider natural for an early-stage startup to have regarding idea validation and early prototype development. Test out all the chatbots (Chatbot 1, Chatbot 2 and Chatbot 3), then answer the questionnaire. Ask all chatbots the same initial question, then let the conversation flow naturally for each chatbot."
+
 def write_data(mydict, client):
     db = client.usertests #establish connection to the 'test_db' db
     backup_db = client.usertests_backup
@@ -41,13 +43,13 @@ def update_chat_db(client, session_storage_name, chatbot):
         print("lagret ny chatobjekt")
 
 
-def init_chatbot(client, task, session_storage_name, chatbot, gpt_model):
+def init_chatbot(client, session_storage_name, chatbot, gpt_model):
     if('user_id' not in st.session_state):
         st.write("You need to consent in the \"Home\" page to get access")
         switch_page("Chatbot")
     else:
-        with st.expander("View Task *(PS: Ask both chatbots the **same initial question**, then let the conversation flow naturally for each chatbot.)*"):
-            st.write(task)
+        with st.expander("View Task *(NB: Ask all chatbots the **same initial question**, then let the conversation flow naturally for each chatbot.)*"):
+            st.write(task_1_description)
 
         if session_storage_name not in st.session_state:
             st.session_state[session_storage_name] = [{"role": "assistant", "content": "How can I help you?"}]

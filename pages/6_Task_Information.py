@@ -18,7 +18,7 @@ if('user_id' not in st.session_state):
     switch_page("Chatbot")
 else:
     st.write("**Time estimate:** ca. *20 minutes*, about *6 minutes* per chatbot.")
-    st.write("**General info:** You can switch between the chats, they are only cleard if you refresh the page or withdraw from the study.")
+    st.write("**General info:** You can switch between the chats, they are only cleared if you refresh the page or withdraw from the study.")
     st.subheader("Task")
     st.write("In this user test, your task is to act as an early-stage tech startup that is in the process of developing an MVP for your business. Ask the chatbots about something you wonder about regarding MVP development. Test out **both** Chatbot 1 and Chatbot 2, then answer the questionnaire. Ask both chatbots the **same initial question**, then let the conversation flow naturally for each chatbot.")
 

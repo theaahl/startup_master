@@ -84,9 +84,9 @@ def get_selectbox_index(option_list, session_state_key):
 
 def display_form():
     # """Displays the form for both new and returning users."""
-    st.subheader("Demogaphics and consent form")
+    st.subheader("Demographics and consent form")
     st.write("By submitting the form you are consenting to:")
-    lst3= ["having received and understood information about the project","having had the opportunity to ask questions", "the participation in this reseach, including communicating with chatbots and answering the questionnaire", "the collection of your data as described in on this page"]
+    lst3= ["having received and understood information about the project","having had the opportunity to ask questions", "the participation in this research, including communicating with chatbots and answering the questionnaire", "the collection of your data as described in on this page"]
     s = ''
     for i in lst3:
         s += "- " + i + "\n"
@@ -128,7 +128,7 @@ with st.form("test_form"):
     is_new_user = st.session_state.get('user_id') is None
     display_form()
 
-    submit_text = "Submit dempgraphics and consent to continue" if is_new_user else "Click to update form information"
+    submit_text = "Submit demographics and consent to continue" if is_new_user else "Click to update form information"
     button_container = st.empty()
 
     if button_container.form_submit_button(submit_text):
