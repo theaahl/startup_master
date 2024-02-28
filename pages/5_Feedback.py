@@ -24,7 +24,7 @@ def init_cookies():
             "c2_option_1", "c2_option_2", "c2_option_3", "c2_perfer", "c2_comment", 
             "c3_option_1", "c3_option_2", "c3_option_3", "c3_perfer", "c3_comment", 
             "c4_option_1", "c4_option_2", "c4_option_3", "c4_perfer", "c4_comment", 
-            "final"]
+            "final", "email"]
 
   for state in states:
     if state not in st.session_state:
@@ -108,7 +108,8 @@ def gather_feedback():
       "perferred_chatbot": st.session_state['c4_perfer']
     },
 
-    "final_comment":st.session_state['final']
+    "final_comment":st.session_state['final'],
+    "email":st.session_state['email']
   }
 
 if "disabled" not in st.session_state:
@@ -322,12 +323,17 @@ final_txt = st.text_area(
 "Do you have any final comments that you would like us to know",
 value=st.session_state['final'],placeholder="Comment"
 )
+
 st.session_state['final'] = final_txt
+
+st.subheader("Participate in gift card draw")
+# st.text("Enter you email to get the chance to win a giftcard of 500 nok to Foodora. You must live in Norway to enter.")
+st.session_state['email'] = st.text_input("Enter your email to get the chance to win a gift card of 500 nok to Foodora. You must live in Norway to enter.", value=st.session_state.get('email', ''), placeholder="name@email.com")
+
 # Every form must have a submit button. Fix what happends on submit
 submitted = st.button(
   "Submit", on_click=disable, disabled=st.session_state.disabled
 )
-
 
 if submitted:
   print("Form has been submitted")
