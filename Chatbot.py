@@ -273,11 +273,6 @@ st.write("Our data protection officer:")
 st.markdown('- Thomas Helgesen: <a href="mailto:thomas.helgesen@ntnu.no">thomas.helgesen@ntnu.no</a> \n', unsafe_allow_html=True)
 st.write("If you have any questions related to the assessment made by the privacy services from Sikt, you can contact them via:")
 st.markdown('<p>Epost: <a href="mailto:personverntjenester@sikt.no">personverntjenester@sikt.no</a> or phone: 73 98 40 40.</p>', unsafe_allow_html=True)
-lst4 = ['<p>Epost: <a href="mailto:personverntjenester@sikt.no">personverntjenester@sikt.no</a> or phone: 73 98 40 40.</p>']
-s = ''
-for i in lst4:
-    s += "- " + i + "\n"
-st.markdown(s,unsafe_allow_html=True)
 
 ####### SIDEBAR #######
 components.sidebar_nav(st.session_state['user_id'] is None)
