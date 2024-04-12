@@ -1,11 +1,9 @@
 import streamlit as st
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
+st.set_page_config(layout="wide", page_title="StartupGPT") 
 import app_components as components 
 import chatbot_utils as cu
-
-st.set_page_config(layout="wide", page_title="StartupGPT") 
-
 
 def local_css(file_name):
     with open(file_name) as f:

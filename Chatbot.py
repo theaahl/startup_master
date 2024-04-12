@@ -6,9 +6,6 @@ from pymongo import MongoClient
 from pymongo.server_api import ServerApi 
 from streamlit_js_eval import streamlit_js_eval
 import csv
-import RAG_chunksize
-import RAG_embed
-import RAG_retrieve
 
 st.set_page_config(layout="wide", page_title="StartupGPT") 
 
