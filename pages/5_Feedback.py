@@ -273,12 +273,12 @@ def display_form():
     value=st.session_state.get('final', ''),placeholder="Comment"
     )
 
-    st.subheader("Participate in gift card draw")
+    st.markdown("**Participate in gift card draw**")
     st.session_state['email'] = st.text_input("Enter your email to get the chance to win a gift card of 500 nok to Foodora. You must live in Norway to enter.", value=st.session_state.get('email', ''), placeholder="name@email.com")
 
     # Every form must have a submit button. Fix what happends on submit
     submitted = st.form_submit_button(
-      "Submit", on_click=disable, disabled=st.session_state.disabled
+      "Submit your feedback", on_click=disable, disabled=st.session_state.disabled, type="primary"
     )
 
     if submitted:
