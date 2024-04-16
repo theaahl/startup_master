@@ -1,11 +1,9 @@
 import streamlit as st
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
+st.set_page_config(layout="wide", page_title="StartupGPT") 
 import app_components as components 
 import chatbot_utils as cu
-
-st.set_page_config(layout="wide", page_title="StartupGPT") 
-
 
 def local_css(file_name):
     with open(file_name) as f:
@@ -33,12 +31,12 @@ session_storage_name = "chatbot3_messages"
 # system_description = ""
 gpt_model = "gpt-4"
 
-startup_role = st.session_state['role']
-startup_age = st.session_state['year']
-startup_stage = st.session_state['stage']
-startup_size = st.session_state['size']
-startup_industry = st.session_state['industry']
-startup_location = st.session_state['location']
+startup_role = st.session_state.get('role', 'startup member')
+startup_age = st.session_state.get('year', 'some years')
+startup_stage = st.session_state.get('stage', 'startup')
+startup_size = st.session_state.get('size', 'some')
+startup_industry = st.session_state.get('industry', 'undisclosed')
+startup_location = st.session_state.get('location', 'Norway')
 
 system_description = f"I am a {startup_role}, in a {startup_stage} of {startup_size} employees, withing the {startup_industry} industry. My startup has been operating for {startup_age} and is located in {startup_location}. Provide answers based on this information"
 
