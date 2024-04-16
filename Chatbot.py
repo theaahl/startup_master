@@ -6,9 +6,6 @@ from pymongo import MongoClient
 from pymongo.server_api import ServerApi 
 from streamlit_js_eval import streamlit_js_eval
 import csv
-import RAG_chunksize
-import RAG_embed
-import RAG_retrieve
 
 st.set_page_config(layout="wide", page_title="StartupGPT") 
 
@@ -54,7 +51,7 @@ def write_data(mydict):
     items_backup.insert_one(mydict)
 
 def get_user_feedback(feedback):
-    user_feedback = {"Task-1":{"id": st.session_state['user_id'], "time": datetime.now(), "Chatbot_versions": "C1: 3.5, C2: 3.5+prompt, C3: 4.0", "Demographic": feedback}}
+    user_feedback = {"Task-1":{"id": st.session_state['user_id'], "time": datetime.now(), "Chatbot_versions": "C1: 4.0, C2: 3.5, C3: 3.5+prompt", "Demographic": feedback}}
     return user_feedback
 
 def update_chat_db(feedback):

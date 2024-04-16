@@ -11,12 +11,12 @@ def local_css(file_name):
 
 local_css("./styles.css")
 
+
 @st.cache_resource(experimental_allow_widgets=True)
 def init_connection():
     return MongoClient(st.secrets.mongo.uri, server_api=ServerApi('1'))
 
 client = init_connection()
-
 
 ####### SIDEBAR #######
 components.sidebar_nav(False)
