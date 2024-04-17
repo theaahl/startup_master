@@ -5,9 +5,9 @@ import app_components as components
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi 
 from streamlit_js_eval import streamlit_js_eval
+import csv
 
 st.set_page_config(layout="wide", page_title="StartupGPT") 
-
 
 def local_css(file_name):
     with open(file_name) as f:
@@ -100,10 +100,10 @@ def display_form():
 
     st.caption("Business details")
     stage_options = [
-        "Seed Stage: Small team working on the development of a business plan and product, with minimal or personal funding.", 
-        "Early Stage: Product is introduced to the market, continued innovation is necessary, focus on building a customer base.", 
-        "Growth Stage: Established presence in the market and a steady customer base, focus on increasing revenue and market share.", 
-        "Expansion Stage: Well-established and financially stable, focus on maintaining market position and exploring new opportunities."
+        "Seed Stage: Small team working on the development of a business plan and product, with minimal or personal funding", 
+        "Early Stage: Product is introduced to the market, continued innovation is necessary, focus on building a customer base", 
+        "Growth Stage: Established presence in the market and a steady customer base, focus on increasing revenue and market share", 
+        "Expansion Stage: Well-established and financially stable, focus on maintaining market position and exploring new opportunities"
     ]
     year_options = [
         "<1 year", 

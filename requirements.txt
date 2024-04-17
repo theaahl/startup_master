@@ -12,3 +12,5 @@ dnspython==1.16.0
 extra_streamlit_components>=0.1.60
 streamlit_extras>=0.3.6
 streamlit_js_eval
+tiktoken>=0.6.0
+pypdf>=4.2.0
