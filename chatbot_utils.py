@@ -9,8 +9,8 @@ task_1_description = "In this user test, your task is to act as an early-stage t
 def write_data(mydict, client):
     db = client.usertests #establish connection to the 'test_db' db
     backup_db = client.usertests_backup
-    items = db.cycle_2 # return all result from the 'test_chats' collection
-    items_backup = backup_db.cycle_2
+    items = db.cycle_3 # return all result from the 'test_chats' collection
+    items_backup = backup_db.cycle_3
     items.insert_one(mydict)
     items_backup.insert_one(mydict)
 
@@ -32,12 +32,12 @@ def update_chat_db(client, session_storage_name, chatbot):
     chatlog = get_chatlog(session_storage_name)
     backup_db = client.usertests_backup
     
-    print(len(list(db.cycle_2.find({"Task-1.id": st.session_state['user_id']}))))
+    print(len(list(db.cycle_3.find({"Task-1.id": st.session_state['user_id']}))))
 
-    if len(list(db.cycle_2.find({"Task-1.id": st.session_state['user_id']}))) > 0:
+    if len(list(db.cycle_3.find({"Task-1.id": st.session_state['user_id']}))) > 0:
         print("opdaterte chatobjekt")
-        db.cycle_2.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1."+chatbot: chatlog}})
-        backup_db.cycle_2.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1."+chatbot: chatlog}})
+        db.cycle_3.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1."+chatbot: chatlog}})
+        backup_db.cycle_3.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1."+chatbot: chatlog}})
 
     else:
         write_data(get_userchat(chatlog, chatbot), client)
