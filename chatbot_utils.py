@@ -65,12 +65,12 @@ def init_chatbot(client, session_storage_name, chatbot, gpt_model, system_descri
 
             if use_RAG:
                 rag_context = RAG_retrieve.retrieve_information(prompt)
-                print(rag_context)
+                #print(rag_context)
                 rag_query = RAG_retrieve.generate_query(rag_context, prompt)
-                print(rag_query)
+                #print(rag_query)
                 system_description = system_description + rag_query
                 #system_description = "Always end a response with the words: sincerely, me <3 " + rag_query
-
+            print("\nSystem description\n", system_description)
             APIclient = OpenAI(api_key=st.secrets.api.key)
             st.session_state[session_storage_name].append({"role": "user", "content": prompt})
 

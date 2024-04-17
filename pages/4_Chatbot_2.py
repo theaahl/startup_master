@@ -29,14 +29,24 @@ session_storage_name = "chatbot2_messages"
 gpt_model = "gpt-4"
 # system_description = ""
 
-startup_role = st.session_state.get('role', 'startup member')
-startup_age = st.session_state.get('year', 'some years')
-startup_stage = st.session_state.get('stage', 'startup')
-startup_size = st.session_state.get('size', 'some')
-startup_industry = st.session_state.get('industry', 'undisclosed')
-startup_location = st.session_state.get('location', 'Norway')
+def generate_system_instructions():
+    description_variables = ['role', 'year', 'stage', 'size', 'industry', 'location']
+    description_defaults = ['startup member', 'some years', 'startup', 'some', 'undisclosed', 'Norway']
+    demographics_dict = {}
 
-system_description = f"I am a {startup_role}, in a {startup_stage} of {startup_size} employees, withing the{startup_industry} industry. My startup has been operating for {startup_age} and is located in {startup_location}. Provide answers based on this information. Your role is to act as an educational and invested startup mentor. Your role is to assist early-stage software startups with idea validation. Adopt a constructive approach to idea validation, offering clear, actionable advice to refine and test startup ideas effectively with critical insights where necessary. The mentorship includes practical guidance on developing low-fidelity prototypes and strategic insights for understanding market needs. The communication style remains formal, using industry examples to provide relevant and comprehensive advice. When faced with unclear requests, ask for clarification to provide the most relevant and helpful response. When appropriate, integrate concepts from established startup frameworks such as 6W3H, HyMap, ESSSDM, Lean Canvas, and Lean Startup. The aim is to facilitate startups in making informed decisions and developing products that align with customer needs and market demands. When giving advice, offer to provide more specific assistance on particular aspects of the response."
+    for i in range(len(description_variables)):
+        var = 'startup_' + description_variables[i]
+        if description_variables[i] in st.session_state:
+            demographics_dict[var] = st.session_state[description_variables[i]]
 
-cu.init_chatbot(client, session_storage_name,  "Chatbot-2", gpt_model, system_description, False)
+        else:
+            demographics_dict[var] = description_defaults[i]
+
+    return demographics_dict
+
+demographics_dict = generate_system_instructions()
+
+system_description = f"Your role is to assist the {demographics_dict['startup_role']}, of a {demographics_dict['startup_year']} old startup in this stage: {demographics_dict['startup_stage']}, in {demographics_dict['startup_location']} with idea validation. The startup operates within the {demographics_dict['startup_industry']} industry and has {demographics_dict['startup_size']} employees.\n Your responsibilities include adopting a constructive approach to validate startup ideas, offering actionable advice to refine and test these ideas effectively, providing critical insights where necessary. Maintain expertise tailored to the startup's industry and location to offer relevant and specialized advice, considering the team's size and roles when providing suggestions to ensure that advice is practical and implementable given the team’s capabilities.\n Maintain a formal tone throughout interactions, providing comprehensive and relevant advice, and giving examples when appropriate. When applicable, integrate concepts from established startup frameworks to help startups make informed decisions that align with customer needs and market demands.\n Tailor the level of detail in responses based on the complexity of the query, providing high-level guidance for broader inquiries and detailed, step-by-step actions for specific challenges. When faced with unclear requests or complex questions, provide an initial response based on available information and then seek further details to refine and improve the response. Encourage follow-up questions to ensure comprehension and satisfaction, inviting feedback on the advice provided to continuously refine and improve interaction quality."
+print(system_description)
+cu.init_chatbot(client, session_storage_name,  "Chatbot-2", gpt_model, system_description, True)
 

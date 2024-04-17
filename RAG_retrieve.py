@@ -18,8 +18,8 @@ from langchain.prompts import ChatPromptTemplate
 #https://blog.langchain.dev/tutorial-chatgpt-over-your-data/
 
 PROMPT_TEMPLATE = """
-When the user asks a question, use the following context to answer, if relevant:
-
+\nWhen the user asks a question, use the following context to answer, if relevant:
+\n
 {context}
 """
 
@@ -47,7 +47,7 @@ def generate_query(docs, query):
     return prompt
 
 def retrieve_response(prompt):
-    model = ChatOpenAI(openai_api_key=st.secrets.api.key, model_name = 'gpt-3.5-turbo', temperature=0)
+    model = ChatOpenAI(openai_api_key=st.secrets.api.key, model_name = 'gpt-4', temperature=0)
     response_text = model.predict(prompt)
 
     formatted_response = f"Response: {response_text}"
