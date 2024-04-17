@@ -5,7 +5,6 @@ import app_components as components
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi 
 from streamlit_js_eval import streamlit_js_eval
-import csv
 
 st.set_page_config(layout="wide", page_title="StartupGPT") 
 
@@ -45,13 +44,13 @@ def gather_feedback():
 def write_data(mydict):
     db = client.usertests #establish connection to the 'test_db' db
     backup_db = client.usertests_backup
-    items = db.cycle_2 # return all result from the 'test_chats' collection
-    items_backup = backup_db.cycle_2
+    items = db.cycle_3 # return all result from the 'test_chats' collection
+    items_backup = backup_db.cycle_3
     items.insert_one(mydict)
     items_backup.insert_one(mydict)
 
 def get_user_feedback(feedback):
-    user_feedback = {"Task-1":{"id": st.session_state['user_id'], "time": datetime.now(), "Chatbot_versions": "C1: 4.0, C2: 3.5, C3: 3.5+prompt", "Demographic": feedback}}
+    user_feedback = {"Task-1":{"id": st.session_state['user_id'], "time": datetime.now(), "Chatbot_versions": "C1: prompt, C2: prompt+rag, C3: rag", "Demographic": feedback}}
     return user_feedback
 
 def update_chat_db(feedback):
@@ -62,12 +61,12 @@ def update_chat_db(feedback):
     print("form:", user_feedback)
     print("userid:", st.session_state['user_id'])
 
-    print(len(list(db.cycle_2.find({"Task-1.id": st.session_state['user_id']}))))
+    print(len(list(db.cycle_3.find({"Task-1.id": st.session_state['user_id']}))))
 
-    if len(list(db.cycle_2.find({"Task-1.id": st.session_state['user_id']}))) > 0:
+    if len(list(db.cycle_3.find({"Task-1.id": st.session_state['user_id']}))) > 0:
         print("opdaterte chatobjekt")
-        db.cycle_2.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Demographic": feedback}})
-        backup_db.cycle_2.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Demographic": feedback}})
+        db.cycle_3.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Demographic": feedback}})
+        backup_db.cycle_3.update_one({"Task-1.id": st.session_state['user_id']}, {"$set": {"Task-1.time": datetime.now(), "Task-1.Demographic": feedback}})
 
     else:
         write_data(user_feedback)
@@ -209,9 +208,9 @@ else:
         db = client.usertests
         backup_db = client.usertests_backup
 
-        if len(list(db.cycle_2.find({"Task-1.id": st.session_state['user_id']}))) > 0:
-            db.cycle_2.delete_one({"Task-1.id": st.session_state['user_id']})
-            backup_db.cycle_2.delete_one({"Task-1.id": st.session_state['user_id']})
+        if len(list(db.cycle_3.find({"Task-1.id": st.session_state['user_id']}))) > 0:
+            db.cycle_3.delete_one({"Task-1.id": st.session_state['user_id']})
+            backup_db.cycle_3.delete_one({"Task-1.id": st.session_state['user_id']})
 
         for key in st.session_state.keys():
             del st.session_state[key]
