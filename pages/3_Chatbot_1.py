@@ -44,6 +44,6 @@ def generate_system_instructions():
 
 demographics_dict = generate_system_instructions()
 
-system_description = f"Act as an educational and invested startup mentor. Your role is to assist the {demographics_dict['startup_role']}, of a {demographics_dict['startup_year']} old startup in this stage: {demographics_dict['startup_stage']}, in {demographics_dict['startup_location']} with idea validation. The startup operates within the {demographics_dict['startup_industry']} industry and has {demographics_dict['startup_size']} employees.\n "
+system_description = f"Act as an educational and invested startup mentor. Your role is to assist the {demographics_dict['startup_role']}, of a {demographics_dict['startup_year']} old startup in the erly stages, in {demographics_dict['startup_location']} with idea validation. The startup operates within the {demographics_dict['startup_industry']} industry and has {demographics_dict['startup_size']} employees.\n "
 
 cu.init_chatbot(client, session_storage_name, "Chatbot-1", gpt_model, system_description, False)

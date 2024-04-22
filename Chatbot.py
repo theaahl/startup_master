@@ -97,7 +97,7 @@ def display_form():
     st.markdown(s) 
     
 
-    st.caption("Business details (Information regarding budiness details will be used as context by the chatbots)")
+    st.caption("Business details (Information regarding business details will be used as context by the chatbots)")
     stage_options = [
         "Seed Stage: Small team working on the development of a business plan and product, with minimal or personal funding", 
         "Early Stage: Product is introduced to the market, continued innovation is necessary, focus on building a customer base", 
