@@ -50,7 +50,7 @@ def write_data(mydict):
     items_backup.insert_one(mydict)
 
 def get_user_feedback(feedback):
-    user_feedback = {"Task-1":{"id": st.session_state['user_id'], "time": datetime.now(), "Chatbot_versions": "C1: prompt, C2: prompt+rag, C3: rag", "Demographic": feedback}}
+    user_feedback = {"Task-1":{"id": st.session_state['user_id'], "time": datetime.now(), "Chatbot_versions": "C1: dem, C2: dem+prompt+rag, C3: dem+rag", "Demographic": feedback}}
     return user_feedback
 
 def update_chat_db(feedback):
@@ -97,7 +97,7 @@ def display_form():
     st.markdown(s) 
     
 
-    st.caption("Business details")
+    st.caption("Business details (Information regarding budiness details will be used as context by the chatbots)")
     stage_options = [
         "Seed Stage: Small team working on the development of a business plan and product, with minimal or personal funding", 
         "Early Stage: Product is introduced to the market, continued innovation is necessary, focus on building a customer base", 
