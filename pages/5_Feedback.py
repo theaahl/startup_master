@@ -34,10 +34,9 @@ client = init_connection()
 #  """
 ####### SIDEBAR #######
 components.sidebar_nav(False)
-
 ### HEADER ###
 components.sticky_header("Chatbot 3", "Feedback", "None")
-
+st.error('You need to save your answers if you want to switch between the different pages', icon="⚠️")
 #### MAIN CONTENT ####
 if('user_id' not in st.session_state):
     st.write("You need to consent in the \"Home\" page to get access")
@@ -146,7 +145,6 @@ def display_form():
       for i in lst:
           s += "- " + i + "\n"
       st.markdown(s)
-
 
     st.markdown("**Chatbot 1**")
     st.session_state['c1_option_1'] = st.selectbox('​​To what degree did you feel the answers you received correspond with the **Effectiveness**-attribute for **Chatbot 1**',options=selectionbox_options,placeholder="Choose an option",index=get_selected_option(selectionbox_options, "c1_option_1"))
@@ -274,11 +272,11 @@ def display_form():
     )
 
     st.markdown("**Participate in gift card draw**")
-    st.session_state['email'] = st.text_input("Enter your email to get the chance to win a gift card of 500 nok to Foodora. You must live in Norway to enter.", value=st.session_state.get('email', ''), placeholder="name@email.com")
+    st.session_state['email'] = st.text_input("Enter your email to get the chance to win one of two giftcards of 300 and 200 nok to Foodora. You must live in Norway to enter.", value=st.session_state.get('email', ''), placeholder="name@email.com")
 
     # Every form must have a submit button. Fix what happends on submit
     submitted = st.form_submit_button(
-      "Submit your feedback", on_click=disable, disabled=st.session_state.disabled, type="primary"
+      "Save or submit your feedback", type="primary"
     )
 
     if submitted:
@@ -286,8 +284,6 @@ def display_form():
       all_feedback = gather_feedback()
       update_chat_db(all_feedback)
       st.info("Thank you for giving us your feedback!")
-
-   
 
 with st.form("testing"): 
   display_form()
