@@ -34,10 +34,9 @@ client = init_connection()
 #  """
 ####### SIDEBAR #######
 components.sidebar_nav(False)
-
 ### HEADER ###
 components.sticky_header("Chatbot 3", "Feedback", "None")
-
+st.error('You need to save your answers if you want to switch between the different pages', icon="⚠️")
 #### MAIN CONTENT ####
 if('user_id' not in st.session_state):
     st.write("You need to consent in the \"Home\" page to get access")
@@ -277,7 +276,7 @@ def display_form():
 
     # Every form must have a submit button. Fix what happends on submit
     submitted = st.form_submit_button(
-      "Save and submit your feedback", type="primary"
+      "Save or submit your feedback", type="primary"
     )
 
     if submitted:
@@ -285,8 +284,6 @@ def display_form():
       all_feedback = gather_feedback()
       update_chat_db(all_feedback)
       st.info("Thank you for giving us your feedback!")
-
-   
 
 with st.form("testing"): 
   display_form()
