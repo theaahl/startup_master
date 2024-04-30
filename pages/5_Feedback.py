@@ -147,7 +147,6 @@ def display_form():
           s += "- " + i + "\n"
       st.markdown(s)
 
-
     st.markdown("**Chatbot 1**")
     st.session_state['c1_option_1'] = st.selectbox('​​To what degree did you feel the answers you received correspond with the **Effectiveness**-attribute for **Chatbot 1**',options=selectionbox_options,placeholder="Choose an option",index=get_selected_option(selectionbox_options, "c1_option_1"))
 
@@ -274,11 +273,11 @@ def display_form():
     )
 
     st.markdown("**Participate in gift card draw**")
-    st.session_state['email'] = st.text_input("Enter your email to get the chance to win a gift card of 500 nok to Foodora. You must live in Norway to enter.", value=st.session_state.get('email', ''), placeholder="name@email.com")
+    st.session_state['email'] = st.text_input("Enter your email to get the chance to win one of two giftcards of 300 and 200 nok to Foodora. You must live in Norway to enter.", value=st.session_state.get('email', ''), placeholder="name@email.com")
 
     # Every form must have a submit button. Fix what happends on submit
     submitted = st.form_submit_button(
-      "Submit your feedback", on_click=disable, disabled=st.session_state.disabled, type="primary"
+      "Save and submit your feedback", type="primary"
     )
 
     if submitted:
