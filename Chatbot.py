@@ -25,6 +25,40 @@ def init_connection():
 
 client = init_connection()
 
+def get_all_answers():
+    db = client.usertests
+    items = db.cycle_2
+
+    all_items = items.find()
+
+    for item in all_items:
+        print("-----------------------------------")
+        # print(item['Task-1']['Chatbot-1']['0']['role'])
+        # print(len(item['Task-1']['Chatbot-1']))
+        question_lengths = []
+        response_lengths = []
+
+        if 'Chatbot-3' in item['Task-1']:
+            for chat in item['Task-1']['Chatbot-3']:
+                
+                
+                if item['Task-1']['Chatbot-3'][chat]['role'] == "assistant":
+                    response_lengths.append(len(item['Task-1']['Chatbot-3'][chat]['content'].split()))
+                if item['Task-1']['Chatbot-3'][chat]['role'] == "user":
+                    question_lengths.append(len(item['Task-1']['Chatbot-3'][chat]['content'].split()))
+            
+            print(item['Task-1']['id'])
+            print(question_lengths)
+            print(response_lengths)
+        
+            print("-----------------------------------")
+    #return question_lengths, response_lengths
+
+# questions, responses = 
+get_all_answers()
+# print("Alle spørsmål:", questions)
+# print("Alle svar:", responses)
+
 #### MAIN PAGE ####
 st.title("Welcome to StartupGPT")
 
