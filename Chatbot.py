@@ -50,7 +50,7 @@ def write_data(mydict):
     items_backup.insert_one(mydict)
 
 def get_user_feedback(feedback):
-    user_feedback = {"Task-1":{"id": st.session_state['user_id'], "time": datetime.now(), "Chatbot_versions": "C1: dem+prompt+rag, C2: dem+rag, C3: dem", "Demographic": feedback}}
+    user_feedback = {"Task-1":{"id": st.session_state['user_id'], "time": datetime.now(), "Chatbot_versions": "C1: dem+rag, C2: dem, C3: dem+prompt+rag", "Demographic": feedback}}
     return user_feedback
 
 def update_chat_db(feedback):
