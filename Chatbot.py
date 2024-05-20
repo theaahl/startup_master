@@ -28,16 +28,16 @@ client = init_connection()
 
 def get_all_answers():
     db = client.usertests
-    items = db.cycle_2
+    items = db.cycle_3
 
     all_items = items.find()
     print("printer")
     all_answers = []
     fields = ['id', 
               'stage', 'year_of_business', 'size', 'industry', 'location', 'role', 'birth_year', 'ChatGPT_experience', 
-              '3.5_effective', '3.5_efficient', '3.5_reliable', '3.5_satisfactory',
-              '3.5-prompt_effective', '3.5-prompt_efficient', '3.5-prompt_reliable', '3.5-prompt_satisfactory',
-              '4.0_effective', '4.0_efficient', '4.0_reliable', '4.0_satisfactory',
+              'dem_effective', 'dem_efficient', 'dem_reliable', 'dem_satisfactory',
+              'dr_effective', 'dr_efficient', 'dr_reliable', 'dr_satisfactory',
+              'dpr_effective', 'dpr_efficient', 'dpr_reliable', 'dpr_satisfactory',
               'perferred_effective', 'perferred_efficient', 'perferred_reliable', 'perferred_satisfactory',
               'comment_effective', 'comment_efficient', 'comment_reliable', 'comment_satisfactory',              
               'final_comment'
@@ -51,9 +51,9 @@ def get_all_answers():
         for x in item['Task-1']['Demographic']:
             data.append(item['Task-1']['Demographic'][x])
 
-        three_five = []
-        three_five_prompt = []
-        four_zero = []
+        dem = []
+        dpr = []
+        dr = []
         perferred = []
         comment = []
         final = []
@@ -69,25 +69,25 @@ def get_all_answers():
                 elif x == 'email':
                     continue
                 
-                elif item['Task-1']['Chatbot_versions'] == 'C1: 3.5, C2: 3.5+prompt, C3: 4.0':
-                    three_five.append(item['Task-1']['Feedback'][x]['chatbot_1'])
-                    three_five_prompt.append(item['Task-1']['Feedback'][x]['chatbot_2'])
-                    four_zero.append(item['Task-1']['Feedback'][x]['chatbot_3'])
+                elif item['Task-1']['Chatbot_versions'] == 'C1: dem, C2: dem+prompt+rag, C3: dem+rag':
+                    dem.append(item['Task-1']['Feedback'][x]['chatbot_1'])
+                    dpr.append(item['Task-1']['Feedback'][x]['chatbot_2'])
+                    dr.append(item['Task-1']['Feedback'][x]['chatbot_3'])
 
-                elif item['Task-1']['Chatbot_versions'] == 'C1: 4.0, C2: 3.5, C3: 3.5+prompt':
-                    four_zero.append(item['Task-1']['Feedback'][x]['chatbot_1'])
-                    three_five_prompt.append(item['Task-1']['Feedback'][x]['chatbot_2'])
-                    three_five.append(item['Task-1']['Feedback'][x]['chatbot_3'])
-
+                elif  item['Task-1']['Chatbot_versions'] == 'C1: dem+prompt+rag, C2: dem+rag, C3: dem':
+                    dpr.append(item['Task-1']['Feedback'][x]['chatbot_1'])
+                    dr.append(item['Task-1']['Feedback'][x]['chatbot_2'])
+                    dem.append(item['Task-1']['Feedback'][x]['chatbot_3'])
+                
                 else:
-                    three_five_prompt.append(item['Task-1']['Feedback'][x]['chatbot_1'])
-                    four_zero.append(item['Task-1']['Feedback'][x]['chatbot_2'])
-                    three_five.append(item['Task-1']['Feedback'][x]['chatbot_3'])
+                    dr.append(item['Task-1']['Feedback'][x]['chatbot_1'])
+                    dem.append(item['Task-1']['Feedback'][x]['chatbot_2'])
+                    dpr.append(item['Task-1']['Feedback'][x]['chatbot_3'])
 
                 comment.append(item['Task-1']['Feedback'][x]['comment'])
                 perferred.append(item['Task-1']['Feedback'][x]['perferred_chatbot'])
 
-        all_data = data + three_five + three_five_prompt + four_zero + perferred + comment + final
+        all_data = data + dem + dr + dpr + perferred + comment + final
         all_answers.append(all_data)
     
     return all_answers
@@ -99,7 +99,7 @@ def save_to_csv(data, filename):
         csv_writer = csv.writer(csvfile)
         csv_writer.writerows(data)
 
-save_to_csv(test_data, 'c2-data-test.csv')
+save_to_csv(test_data, '/Users/theaahlgren/Desktop/usertests_cycle_3.csv')
 
 #### MAIN PAGE ####
 st.title("Welcome to StartupGPT")
